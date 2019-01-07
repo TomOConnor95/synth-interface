@@ -78,14 +78,13 @@ class GaugeChart extends StatelessWidget {
       // new GaugeSegment('High', 50),
       // new GaugeSegment('Highly Unusual', 53),
     ];
-    print(charts.MaterialPalette.red.shadeDefault.getType())
     return [
       new charts.Series<GaugeSegment, String>(
         id: 'Segments',
         domainFn: (GaugeSegment segment, _) => segment.segment,
         measureFn: (GaugeSegment segment, _) => segment.size,
         data: data,
-        colorFn: (_, __) =>  false ? charts.MaterialPalette.red.shadeDefault : charts.MaterialPalette.green.shadeDefault,
+        colorFn: (_, __) =>  false ? charts.MaterialPalette.red.shadeDefault : charts.MaterialPalette.green.shadeDefault, 
       )
     ];
   }

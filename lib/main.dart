@@ -1,6 +1,5 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import './gauge.dart';
+import './preset_gauge_display.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,8 +26,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -47,7 +44,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   double _sliderValue1 = 10.0;
   double _sliderValue2 = 10.0;
   double _sliderValue3 = 10.0;
@@ -75,7 +73,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     return preset[index];
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -88,41 +85,24 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           // the state that has changed here is the animation object’s value
         });
       });
- 
+
     _angleAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-          _controller.reset();
-      } 
-      else if (status == AnimationStatus.dismissed) {
-          _controller.forward();
+        _controller.reset();
+      } else if (status == AnimationStatus.dismissed) {
+        _controller.forward();
       }
     });
     _controller.forward();
   }
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  Widget presetGaugeDisplay(double value1, double  value2, double value3) {
-    double angleInDegrees = _angleAnimation.value;
-    return Stack(
-      children: <Widget>[
-        Transform.rotate(
-          angle: angleInDegrees / 360 * 2 * pi,
-          child: Center(child: Transform.scale(scale: 1.0, child: SizedBox(height: 70.0, width: 70.0, child: new GaugeChart.withSampleData(value1 * 10, Colors.red)))),
-        ),
-        Transform.rotate(
-          angle: angleInDegrees / 360 * 3 * pi,
-          child: Center(child: Transform.scale(scale: 0.7, child: SizedBox(height: 70.0, width: 70.0, child: new GaugeChart.withSampleData(value2 * 10, Colors.blue)))),
-        ),
-        Transform.rotate(
-          angle: angleInDegrees / 360 * 4 * pi,
-          child: Center(child: Transform.scale(scale: 0.48, child: SizedBox(height: 70.0, width: 70.0, child: new GaugeChart.withSampleData(value3 * 10, Colors.green)))),
-        ),      ],
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -161,16 +141,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              height: 170,
-              width: 200,
-              child: Transform.scale(scale: 2, child:
-              presetGaugeDisplay(
-                _sliderValue1,
-                _sliderValue2,
-                _sliderValue3,
-                )
-              )
-            ),
+                height: 170,
+                width: 200,
+                child: Transform.scale(
+                    scale: 2,
+                    child: presetGaugeDisplay(
+                      _sliderValue1,
+                      _sliderValue2,
+                      _sliderValue3,
+                      _angleAnimation.value,
+                    ))),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: Text(
@@ -267,7 +247,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                           title: Column(
                             children: <Widget>[
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   Text(
                                     '${_getPresetValue(_presets[position], 0).toStringAsFixed(2)}',
@@ -295,18 +276,19 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                   ),
                                 ],
                               ),
-                              
                             ],
                           ),
                           leading: Container(
                             height: 70,
                             width: 70,
-                            child: 
-                            presetGaugeDisplay(
-                              _getPresetValue(_presets[position], 0),
-                              _getPresetValue(_presets[position], 1),
-                              _getPresetValue(_presets[position], 2),
-                              )
+                            child: Transform.scale(
+                                scale: 0.65,
+                                child: presetGaugeDisplay(
+                                  _getPresetValue(_presets[position], 0),
+                                  _getPresetValue(_presets[position], 1),
+                                  _getPresetValue(_presets[position], 2),
+                                  _angleAnimation.value,
+                                )),
                           ),
                           onTap: () {
                             setState(
