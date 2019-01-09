@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './preset_gauge_display.dart';
+import './oscillator_params.dart';
 
 void main() => runApp(MyApp());
 
@@ -46,17 +47,68 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  double _sliderValue1 = 10.0;
-  double _sliderValue2 = 10.0;
-  double _sliderValue3 = 10.0;
+  double _sliderValue1 = 0.6;
+  double _sliderValue2 = 0.7;
+  double _sliderValue3 = 0.8;
 
-  var _presets = new List();
+  Color _color1 = Colors.indigoAccent;
+  Color _color2 = Colors.red;
+  Color _color3 = Colors.green;
+
+  var _oscillatorParams1 = OscillatorParams(
+    0.6,
+    0.7,
+    3,
+    0.2,
+    4,
+  );
+
+  var _oscillatorParams2 = OscillatorParams(
+    0.7,
+    0.6,
+    5,
+    0.1,
+    4,
+  );
+
+  var _oscillatorParams3 = OscillatorParams(
+    0.8,
+    0.1,
+    3,
+    0.1,
+    10,
+  );
+
+  var _presets = new List<List<OscillatorParams>>();
 
   Animation<double> _angleAnimation;
   AnimationController _controller;
 
   void _savePreset() {
-    var preset = [_sliderValue1, _sliderValue2, _sliderValue3];
+    var _params1 = OscillatorParams(
+    _sliderValue1,
+    0.7,
+    3,
+    0.2,
+    4,
+  );
+  var _params2 = OscillatorParams(
+    _sliderValue2,
+    0.6,
+    5,
+    0.1,
+    4,
+  );
+
+  var _params3 = OscillatorParams(
+    _sliderValue3,
+    0.1,
+    3,
+    0.1,
+    10,
+  );
+    var preset = [_params1, _params2, _params3];
+
     setState(() => _presets.add(preset));
     print(_presets);
   }
@@ -69,9 +121,6 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
-  double _getPresetValue(List preset, int index) {
-    return preset[index];
-  }
 
   @override
   void initState() {
@@ -79,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage>
 
     _controller = new AnimationController(
         duration: const Duration(milliseconds: 8000), vsync: this);
-    _angleAnimation = new Tween(begin: 0.0, end: 720.0).animate(_controller)
+    _angleAnimation = new Tween(begin: 0.0, end: 360.0).animate(_controller)
       ..addListener(() {
         setState(() {
           // the state that has changed here is the animation object’s value
@@ -146,9 +195,9 @@ class _MyHomePageState extends State<MyHomePage>
                 child: Transform.scale(
                     scale: 2,
                     child: presetGaugeDisplay(
-                      _sliderValue1,
-                      _sliderValue2,
-                      _sliderValue3,
+                      _oscillatorParams1, _color1,
+                      _oscillatorParams2, _color2,
+                      _oscillatorParams3, _color3,
                       _angleAnimation.value,
                     ))),
             Padding(
@@ -161,11 +210,12 @@ class _MyHomePageState extends State<MyHomePage>
               children: <Widget>[
                 Expanded(
                   child: Slider(
-                    activeColor: Colors.indigoAccent,
+                    activeColor: _color1,
                     min: 0.0,
-                    max: 10.0,
-                    onChanged: (newRating) {
-                      setState(() => _sliderValue1 = newRating);
+                    max: 1.0,
+                    onChanged: (newValue) {
+                      setState(() => _sliderValue1 = newValue);
+                      setState(() => _oscillatorParams1.length = newValue);
                     },
                     value: _sliderValue1,
                   ),
@@ -176,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage>
                   child: Text(
                     '${_sliderValue1.toStringAsFixed(2)}',
                     style: TextStyle(
-                      color: Colors.indigoAccent,
+                      color: _color1,
                       fontSize: 32,
                     ),
                   ),
@@ -187,11 +237,12 @@ class _MyHomePageState extends State<MyHomePage>
               children: <Widget>[
                 Expanded(
                   child: Slider(
-                    activeColor: Colors.red,
+                    activeColor: _color2,
                     min: 0.0,
-                    max: 10.0,
-                    onChanged: (newRating) {
-                      setState(() => _sliderValue2 = newRating);
+                    max: 1.0,
+                    onChanged: (newValue) {
+                      setState(() => _sliderValue2 = newValue);
+                      setState(() => _oscillatorParams2.length = newValue);
                     },
                     value: _sliderValue2,
                   ),
@@ -202,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage>
                   child: Text(
                     '${_sliderValue2.toStringAsFixed(2)}',
                     style: TextStyle(
-                      color: Colors.red,
+                      color: _color2,
                       fontSize: 32,
                     ),
                   ),
@@ -213,11 +264,13 @@ class _MyHomePageState extends State<MyHomePage>
               children: <Widget>[
                 Expanded(
                   child: Slider(
-                    activeColor: Colors.green,
+                    activeColor: _color3,
                     min: 0.0,
-                    max: 10.0,
-                    onChanged: (newRating) {
-                      setState(() => _sliderValue3 = newRating);
+                    max: 1.0,
+                    onChanged: (newValue) {
+                      setState(() => _sliderValue3 = newValue);
+                      setState(() => _oscillatorParams3.length = newValue);
+
                     },
                     value: _sliderValue3,
                   ),
@@ -228,7 +281,7 @@ class _MyHomePageState extends State<MyHomePage>
                     child: Text(
                       '${_sliderValue3.toStringAsFixed(2)}',
                       style: TextStyle(
-                        color: Colors.green,
+                        color: _color3,
                         fontSize: 32,
                       ),
                     )),
@@ -251,27 +304,27 @@ class _MyHomePageState extends State<MyHomePage>
                                     MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   Text(
-                                    '${_getPresetValue(_presets[position], 0).toStringAsFixed(2)}',
+                                    '${_presets[position][0].length.toStringAsFixed(2)}',
                                     // 'Hello',
                                     style: TextStyle(
                                       fontSize: 22.0,
-                                      color: Colors.indigoAccent,
+                                      color: _color1,
                                     ),
                                   ),
                                   Text(
-                                    '${_getPresetValue(_presets[position], 1).toStringAsFixed(2)}',
+                                    '${_presets[position][1].length.toStringAsFixed(2)}',
                                     // 'Hello',
                                     style: TextStyle(
                                       fontSize: 22.0,
-                                      color: Colors.red,
+                                      color: _color2,
                                     ),
                                   ),
                                   Text(
-                                    '${_getPresetValue(_presets[position], 2).toStringAsFixed(2)}',
+                                    '${_presets[position][2].length.toStringAsFixed(2)}',
                                     // 'Hello',
                                     style: TextStyle(
                                       fontSize: 22.0,
-                                      color: Colors.green,
+                                      color: _color3,
                                     ),
                                   ),
                                 ],
@@ -284,19 +337,20 @@ class _MyHomePageState extends State<MyHomePage>
                             child: Transform.scale(
                                 scale: 0.65,
                                 child: presetGaugeDisplay(
-                                  _getPresetValue(_presets[position], 0),
-                                  _getPresetValue(_presets[position], 1),
-                                  _getPresetValue(_presets[position], 2),
+                                  _presets[position][0], _color1,
+                                  _presets[position][1], _color2,
+                                  _presets[position][2], _color3,
                                   _angleAnimation.value,
                                 )),
                           ),
                           onTap: () {
-                            setState(
-                                () => _sliderValue1 = _presets[position][0]);
-                            setState(
-                                () => _sliderValue2 = _presets[position][1]);
-                            setState(
-                                () => _sliderValue3 = _presets[position][2]);
+                            setState(() => _sliderValue1 = _presets[position][0].length);
+                            setState(() => _sliderValue2 = _presets[position][1].length);
+                            setState(() => _sliderValue3 = _presets[position][2].length);
+
+                            setState(() => _oscillatorParams1.length = _presets[position][0].length);
+                            setState(() => _oscillatorParams2.length = _presets[position][1].length);
+                            setState(() => _oscillatorParams3.length = _presets[position][2].length);
                           },
                           trailing: IconButton(
                             icon: const Icon(Icons.remove_circle_outline),
