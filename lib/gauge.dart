@@ -84,7 +84,7 @@ class GaugeChart extends StatelessWidget {
         domainFn: (GaugeSegment segment, _) => segment.segment,
         measureFn: (GaugeSegment segment, _) => segment.size,
         data: data,
-        colorFn: (_, __) =>  false ? charts.MaterialPalette.red.shadeDefault : charts.MaterialPalette.green.shadeDefault, 
+        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault, 
       )
     ];
   }

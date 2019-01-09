@@ -30,9 +30,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  double _sliderValue1 = 0.6;
-  double _sliderValue2 = 0.7;
-  double _sliderValue3 = 0.8;
+  double _lengthSlider1 = 0.6;
+  double _lengthSlider2 = 0.7;
+  double _lengthSlider3 = 0.8;
+
+  double _widthAmpSlider1 = 0.7;
+  double _widthAmpSlider2 = 0.8;
+  double _widthAmpSlider3 = 0.9;
+
+  int _widthFreqSlider1 = 2;
 
   Color _color1 = Colors.indigoAccent;
   Color _color2 = Colors.red;
@@ -69,23 +75,23 @@ class _MyHomePageState extends State<MyHomePage>
 
   void _savePreset() {
     var _params1 = OscillatorParams(
-    _sliderValue1,
-    0.7,
+    _lengthSlider1,
+    _widthAmpSlider1,
     3,
     0.2,
     4,
   );
   var _params2 = OscillatorParams(
-    _sliderValue2,
-    0.6,
+    _lengthSlider2,
+    _widthAmpSlider2,
     5,
     0.1,
     4,
   );
 
   var _params3 = OscillatorParams(
-    _sliderValue3,
-    0.1,
+    _lengthSlider3,
+    _widthAmpSlider3,
     3,
     0.1,
     10,
@@ -103,7 +109,18 @@ class _MyHomePageState extends State<MyHomePage>
       color: Colors.lightBlueAccent,
     );
   }
-
+Widget ParameterValueDisplay (value, Color color){
+  return Container(
+    width: 60,
+    child: Text(
+      '${value is int ? value : value.toStringAsFixed(2)}',
+      style: TextStyle(
+        color: color,
+        fontSize: 22,
+      ),
+    )
+  );
+}
 
   @override
   void initState() {
@@ -164,170 +181,236 @@ class _MyHomePageState extends State<MyHomePage>
                       _oscillatorParams3, _color3,
                       _angleAnimation.value,
                     ))),
+            
             Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Text(
-                'Here are some sliders:',
-              ),
+              padding: const EdgeInsets.only(top: 10.0),
+              child: savePresetButton,
             ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Slider(
+
+            ExpansionTile(
+              title: Text(
+                'Oscillator 1',
+                style: TextStyle(
+                color: _color1,
+                fontSize: 22,
+                ),
+              ),
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 16),
+                  dense: true,
+                  leading: Text(
+                    'Length',
+                    style: TextStyle(
+                    color: _color1,
+                    fontSize: 20,
+                    ),
+                  ),
+                  trailing: ParameterValueDisplay(_lengthSlider1, _color1),
+                  title: Slider(
                     activeColor: _color1,
                     min: 0.0,
                     max: 1.0,
                     onChanged: (newValue) {
-                      setState(() => _sliderValue1 = newValue);
+                      setState(() => _lengthSlider1 = newValue);
                       setState(() => _oscillatorParams1.length = newValue);
                     },
-                    value: _sliderValue1,
+                    value: _lengthSlider1,
                   ),
                 ),
-                Container(
-                  width: 90.0,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '${_sliderValue1.toStringAsFixed(2)}',
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 16),
+                  dense: true,
+                  leading: Text(
+                    'WidthAmp',
                     style: TextStyle(
-                      color: _color1,
-                      fontSize: 32,
+                    color: _color1,
+                    fontSize: 20,
                     ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Slider(
-                    activeColor: _color2,
+                  trailing: ParameterValueDisplay(_widthAmpSlider1, _color1),
+                  title: Slider(
+                    activeColor: _color1,
                     min: 0.0,
                     max: 1.0,
                     onChanged: (newValue) {
-                      setState(() => _sliderValue2 = newValue);
-                      setState(() => _oscillatorParams2.length = newValue);
+                      setState(() => _widthAmpSlider1 = newValue);
+                      setState(() => _oscillatorParams1.widthAmp = newValue);
                     },
-                    value: _sliderValue2,
+                    value: _widthAmpSlider1,
                   ),
                 ),
-                Container(
-                  width: 90.0,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '${_sliderValue2.toStringAsFixed(2)}',
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 16),
+                  dense: true,
+                  leading: Text(
+                    'WidthFreq',
                     style: TextStyle(
-                      color: _color2,
-                      fontSize: 32,
+                    color: _color1,
+                    fontSize: 20,
                     ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Slider(
-                    activeColor: _color3,
-                    min: 0.0,
-                    max: 1.0,
+                  trailing: ParameterValueDisplay(_widthFreqSlider1, _color1),
+                  title: Slider(
+                    activeColor: _color1,
+                    min: 0,
+                    max: 10,
+                    divisions: 10,
                     onChanged: (newValue) {
-                      setState(() => _sliderValue3 = newValue);
-                      setState(() => _oscillatorParams3.length = newValue);
-
+                      setState(() => _widthFreqSlider1 = newValue.toInt());
+                      setState(() => _oscillatorParams1.widthFreq = newValue.toInt());
                     },
-                    value: _sliderValue3,
+                    value: _widthFreqSlider1.toDouble(),
                   ),
                 ),
-                Container(
-                    width: 90.0,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '${_sliderValue3.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        color: _color3,
-                        fontSize: 32,
-                      ),
-                    )),
-              ],
+              ]
             ),
-            savePresetButton,
+            ExpansionTile(
+              title: Text(
+                'Oscillator 2',
+                style: TextStyle(
+                color: _color2,
+                fontSize: 22,
+                ),
+              ),
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 16),
+                  dense: true,
+                  leading: Text(
+                    'Length',
+                    style: TextStyle(
+                    color: _color2,
+                    fontSize: 20,
+                    ),
+                  ),
+                  trailing: ParameterValueDisplay(_lengthSlider2, _color2),
+                  title: Slider(
+                      activeColor: _color2,
+                      min: 0.0,
+                      max: 1.0,
+                      onChanged: (newValue) {
+                        setState(() => _lengthSlider2 = newValue);
+                        setState(() => _oscillatorParams2.length = newValue);
+                      },
+                      value: _lengthSlider2,
+                    ),
+                  ),
+                ],
+            ),
+            ExpansionTile(
+              title: Text(
+                'Oscillator 3',
+                style: TextStyle(
+                color: _color3,
+                fontSize: 22,
+                ),
+              ),
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 16),
+                  dense: true,
+                  leading: Text(
+                    'Length',
+                    style: TextStyle(
+                    color: _color3,
+                    fontSize: 20,
+                    ),
+                  ),
+                  trailing: ParameterValueDisplay(_lengthSlider3, _color3),
+                  title: Slider(
+                      activeColor: _color3,
+                      min: 0.0,
+                      max: 1.0,
+                      onChanged: (newValue) {
+                        setState(() => _lengthSlider3 = newValue);
+                        setState(() => _oscillatorParams3.length = newValue);
+                      },
+                      value: _lengthSlider3,
+                    ),
+                  ),
+                ],
+            ),
             Expanded(
               child: ListView.builder(
-                  itemCount: _presets.length,
-                  padding: const EdgeInsets.all(3.0),
-                  itemBuilder: (context, position) {
-                    return Column(
-                      children: <Widget>[
-                        Divider(height: 5.0),
-                        ListTile(
-                          title: Column(
+              itemCount: _presets.length,
+              padding: const EdgeInsets.all(3.0),
+              itemBuilder: (context, position) {
+                return Column(
+                  children: <Widget>[
+                    Divider(height: 5.0),
+                    ListTile(
+                      title: Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  Text(
-                                    '${_presets[position][0].length.toStringAsFixed(2)}',
-                                    // 'Hello',
-                                    style: TextStyle(
-                                      fontSize: 22.0,
-                                      color: _color1,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${_presets[position][1].length.toStringAsFixed(2)}',
-                                    // 'Hello',
-                                    style: TextStyle(
-                                      fontSize: 22.0,
-                                      color: _color2,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${_presets[position][2].length.toStringAsFixed(2)}',
-                                    // 'Hello',
-                                    style: TextStyle(
-                                      fontSize: 22.0,
-                                      color: _color3,
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                '${_presets[position][0].length.toStringAsFixed(2)}',
+                                // 'Hello',
+                                style: TextStyle(
+                                  fontSize: 22.0,
+                                  color: _color1,
+                                ),
+                              ),
+                              Text(
+                                '${_presets[position][1].length.toStringAsFixed(2)}',
+                                // 'Hello',
+                                style: TextStyle(
+                                  fontSize: 22.0,
+                                  color: _color2,
+                                ),
+                              ),
+                              Text(
+                                '${_presets[position][2].length.toStringAsFixed(2)}',
+                                // 'Hello',
+                                style: TextStyle(
+                                  fontSize: 22.0,
+                                  color: _color3,
+                                ),
                               ),
                             ],
                           ),
-                          leading: Container(
-                            height: 70,
-                            width: 70,
-                            child: Transform.scale(
-                                scale: 0.65,
-                                child: presetGaugeDisplay(
-                                  _presets[position][0], _color1,
-                                  _presets[position][1], _color2,
-                                  _presets[position][2], _color3,
-                                  _angleAnimation.value,
-                                )),
-                          ),
-                          onTap: () {
-                            setState(() => _sliderValue1 = _presets[position][0].length);
-                            setState(() => _sliderValue2 = _presets[position][1].length);
-                            setState(() => _sliderValue3 = _presets[position][2].length);
+                        ],
+                      ),
+                      leading: Container(
+                        height: 70,
+                        width: 70,
+                        child: Transform.scale(
+                            scale: 0.65,
+                            child: presetGaugeDisplay(
+                              _presets[position][0], _color1,
+                              _presets[position][1], _color2,
+                              _presets[position][2], _color3,
+                              _angleAnimation.value,
+                            )),
+                      ),
+                      onTap: () {
+                        setState(() => _lengthSlider1 = _presets[position][0].length);
+                        setState(() => _lengthSlider2 = _presets[position][1].length);
+                        setState(() => _lengthSlider3 = _presets[position][2].length);
 
-                            setState(() => _oscillatorParams1.length = _presets[position][0].length);
-                            setState(() => _oscillatorParams2.length = _presets[position][1].length);
-                            setState(() => _oscillatorParams3.length = _presets[position][2].length);
-                          },
-                          trailing: IconButton(
-                            icon: const Icon(Icons.remove_circle_outline),
-                            onPressed: () {
-                              setState(() {
-                                _presets.removeAt(position);
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
+                        setState(() => _widthAmpSlider1 = _presets[position][0].widthAmp);
+
+                        setState(() => _oscillatorParams1.length = _presets[position][0].length);
+                        setState(() => _oscillatorParams2.length = _presets[position][1].length);
+                        setState(() => _oscillatorParams3.length = _presets[position][2].length);
+
+                        setState(() => _oscillatorParams1.widthAmp = _presets[position][0].widthAmp);
+                      },
+                      trailing: IconButton(
+                        icon: const Icon(Icons.remove_circle_outline),
+                        onPressed: () {
+                          setState(() {
+                            _presets.removeAt(position);
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }),
             ),
           ],
         ),
