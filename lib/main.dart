@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './preset_gauge_display.dart';
 import './oscillator_params.dart';
+import './slider_tile.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,7 +31,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  double _lengthSlider1 = 0.6;
+  double _lengthSlider1 = 0.3;
   double _lengthSlider2 = 0.7;
   double _lengthSlider3 = 0.8;
 
@@ -39,6 +40,81 @@ class _MyHomePageState extends State<MyHomePage>
   double _widthAmpSlider3 = 0.9;
 
   int _widthFreqSlider1 = 2;
+  int _widthFreqSlider2 = 3;
+  int _widthFreqSlider3 = 4;
+
+  double _opacityAmpSlider1 = 0.7;
+  double _opacityAmpSlider2 = 0.8;
+  double _opacityAmpSlider3 = 0.9;
+
+  int _opacityFreqSlider1 = 3;
+  int _opacityFreqSlider2 = 4;
+  int _opacityFreqSlider3 = 5;
+  
+  _lengthSlider1Callback(newValue) {
+    setState(() => _lengthSlider1 = newValue);
+    setState(() => _oscillatorParams1.length = newValue);
+  }
+  _lengthSlider2Callback(newValue) {
+    setState(() => _lengthSlider2 = newValue);
+    setState(() => _oscillatorParams2.length = newValue);
+  }
+  _lengthSlider3Callback(newValue) {
+    setState(() => _lengthSlider3 = newValue);
+    setState(() => _oscillatorParams3.length = newValue);
+  }
+
+  _widthAmpSlider1Callback(newValue) {
+    setState(() => _widthAmpSlider1 = newValue);
+    setState(() => _oscillatorParams1.widthAmp = newValue);
+  }
+  _widthAmpSlider2Callback(newValue) {
+    setState(() => _widthAmpSlider2 = newValue);
+    setState(() => _oscillatorParams2.widthAmp = newValue);
+  }
+  _widthAmpSlider3Callback(newValue) {
+    setState(() => _widthAmpSlider3 = newValue);
+    setState(() => _oscillatorParams3.widthAmp = newValue);
+  }
+
+  _widthFreqSlider1Callback(newValue) {
+    setState(() => _widthFreqSlider1 = newValue);
+    setState(() => _oscillatorParams1.widthFreq = newValue);
+  }
+  _widthFreqSlider2Callback(newValue) {
+    setState(() => _widthFreqSlider2 = newValue);
+    setState(() => _oscillatorParams2.widthFreq = newValue);
+  }
+  _widthFreqSlider3Callback(newValue) {
+    setState(() => _widthFreqSlider3 = newValue);
+    setState(() => _oscillatorParams3.widthFreq = newValue);
+  }
+
+  _opacityAmpSlider1Callback(newValue) {
+    setState(() => _opacityAmpSlider1 = newValue);
+    setState(() => _oscillatorParams1.opacityAmp = newValue);
+  }
+  _opacityAmpSlider2Callback(newValue) {
+    setState(() => _opacityAmpSlider2 = newValue);
+    setState(() => _oscillatorParams2.opacityAmp = newValue);
+  }
+  _opacityAmpSlider3Callback(newValue) {
+    setState(() => _opacityAmpSlider3 = newValue);
+    setState(() => _oscillatorParams3.opacityAmp = newValue);
+  }
+
+  _opacityFreqSlider1Callback(newValue) {
+    setState(() => _opacityFreqSlider1 = newValue);
+    setState(() => _oscillatorParams1.opacityFreq = newValue);
+  }
+   _opacityFreqSlider2Callback(newValue) {
+    setState(() => _opacityFreqSlider2 = newValue);
+    setState(() => _oscillatorParams2.opacityFreq = newValue);
+  }
+   _opacityFreqSlider3Callback(newValue) {
+    setState(() => _opacityFreqSlider3 = newValue);
+    setState(() => _oscillatorParams3.opacityFreq = newValue);
+  }
 
   Color _color1 = Colors.indigoAccent;
   Color _color2 = Colors.red;
@@ -109,18 +185,6 @@ class _MyHomePageState extends State<MyHomePage>
       color: Colors.lightBlueAccent,
     );
   }
-Widget ParameterValueDisplay (value, Color color){
-  return Container(
-    width: 60,
-    child: Text(
-      '${value is int ? value : value.toStringAsFixed(2)}',
-      style: TextStyle(
-        color: color,
-        fontSize: 22,
-      ),
-    )
-  );
-}
 
   @override
   void initState() {
@@ -150,8 +214,6 @@ Widget ParameterValueDisplay (value, Color color){
     _controller.dispose();
     super.dispose();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -196,73 +258,11 @@ Widget ParameterValueDisplay (value, Color color){
                 ),
               ),
               children: [
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 16),
-                  dense: true,
-                  leading: Text(
-                    'Length',
-                    style: TextStyle(
-                    color: _color1,
-                    fontSize: 20,
-                    ),
-                  ),
-                  trailing: ParameterValueDisplay(_lengthSlider1, _color1),
-                  title: Slider(
-                    activeColor: _color1,
-                    min: 0.0,
-                    max: 1.0,
-                    onChanged: (newValue) {
-                      setState(() => _lengthSlider1 = newValue);
-                      setState(() => _oscillatorParams1.length = newValue);
-                    },
-                    value: _lengthSlider1,
-                  ),
-                ),
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 16),
-                  dense: true,
-                  leading: Text(
-                    'WidthAmp',
-                    style: TextStyle(
-                    color: _color1,
-                    fontSize: 20,
-                    ),
-                  ),
-                  trailing: ParameterValueDisplay(_widthAmpSlider1, _color1),
-                  title: Slider(
-                    activeColor: _color1,
-                    min: 0.0,
-                    max: 1.0,
-                    onChanged: (newValue) {
-                      setState(() => _widthAmpSlider1 = newValue);
-                      setState(() => _oscillatorParams1.widthAmp = newValue);
-                    },
-                    value: _widthAmpSlider1,
-                  ),
-                ),
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 16),
-                  dense: true,
-                  leading: Text(
-                    'WidthFreq',
-                    style: TextStyle(
-                    color: _color1,
-                    fontSize: 20,
-                    ),
-                  ),
-                  trailing: ParameterValueDisplay(_widthFreqSlider1, _color1),
-                  title: Slider(
-                    activeColor: _color1,
-                    min: 0,
-                    max: 10,
-                    divisions: 10,
-                    onChanged: (newValue) {
-                      setState(() => _widthFreqSlider1 = newValue.toInt());
-                      setState(() => _oscillatorParams1.widthFreq = newValue.toInt());
-                    },
-                    value: _widthFreqSlider1.toDouble(),
-                  ),
-                ),
+                SliderTile(_lengthSlider1, _color1, _lengthSlider1Callback, 'Length'),
+                SliderTile(_widthAmpSlider1, _color1, _widthAmpSlider1Callback, 'WidthAmp'),
+                SliderTileInt(_widthFreqSlider1, _color1, _widthFreqSlider1Callback, 'WidthFreq'),
+                SliderTile(_opacityAmpSlider1, _color1, _opacityAmpSlider1Callback, 'OpacAmp'),
+                SliderTileInt(_opacityFreqSlider1, _color1, _opacityFreqSlider1Callback, 'OpacFreq'),
               ]
             ),
             ExpansionTile(
@@ -274,29 +274,12 @@ Widget ParameterValueDisplay (value, Color color){
                 ),
               ),
               children: [
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 16),
-                  dense: true,
-                  leading: Text(
-                    'Length',
-                    style: TextStyle(
-                    color: _color2,
-                    fontSize: 20,
-                    ),
-                  ),
-                  trailing: ParameterValueDisplay(_lengthSlider2, _color2),
-                  title: Slider(
-                      activeColor: _color2,
-                      min: 0.0,
-                      max: 1.0,
-                      onChanged: (newValue) {
-                        setState(() => _lengthSlider2 = newValue);
-                        setState(() => _oscillatorParams2.length = newValue);
-                      },
-                      value: _lengthSlider2,
-                    ),
-                  ),
-                ],
+                SliderTile(_lengthSlider2, _color2, _lengthSlider2Callback, 'Length'),
+                SliderTile(_widthAmpSlider2, _color2, _widthAmpSlider2Callback, 'WidthAmp'),
+                SliderTileInt(_widthFreqSlider2, _color2, _widthFreqSlider2Callback, 'WidthFreq'),
+                SliderTile(_opacityAmpSlider2, _color2, _opacityAmpSlider2Callback, 'OpacAmp'),
+                SliderTileInt(_opacityFreqSlider2, _color2, _opacityFreqSlider2Callback, 'OpacFreq'),
+              ]
             ),
             ExpansionTile(
               title: Text(
@@ -307,29 +290,12 @@ Widget ParameterValueDisplay (value, Color color){
                 ),
               ),
               children: [
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 16),
-                  dense: true,
-                  leading: Text(
-                    'Length',
-                    style: TextStyle(
-                    color: _color3,
-                    fontSize: 20,
-                    ),
-                  ),
-                  trailing: ParameterValueDisplay(_lengthSlider3, _color3),
-                  title: Slider(
-                      activeColor: _color3,
-                      min: 0.0,
-                      max: 1.0,
-                      onChanged: (newValue) {
-                        setState(() => _lengthSlider3 = newValue);
-                        setState(() => _oscillatorParams3.length = newValue);
-                      },
-                      value: _lengthSlider3,
-                    ),
-                  ),
-                ],
+                SliderTile(_lengthSlider3, _color3, _lengthSlider3Callback, 'Length'),
+                SliderTile(_widthAmpSlider3, _color3, _widthAmpSlider3Callback, 'WidthAmp'),
+                SliderTileInt(_widthFreqSlider3, _color3, _widthFreqSlider3Callback, 'WidthFreq'),
+                SliderTile(_opacityAmpSlider3, _color3, _opacityAmpSlider3Callback, 'OpacAmp'),
+                SliderTileInt(_opacityFreqSlider3, _color3, _opacityFreqSlider3Callback, 'OpacFreq'),
+              ]
             ),
             Expanded(
               child: ListView.builder(
@@ -392,12 +358,40 @@ Widget ParameterValueDisplay (value, Color color){
                         setState(() => _lengthSlider3 = _presets[position][2].length);
 
                         setState(() => _widthAmpSlider1 = _presets[position][0].widthAmp);
+                        setState(() => _widthAmpSlider2 = _presets[position][1].widthAmp);
+                        setState(() => _widthAmpSlider3 = _presets[position][2].widthAmp);
+
+                        setState(() => _widthFreqSlider1 = _presets[position][0].widthFreq);
+                        setState(() => _widthFreqSlider2 = _presets[position][1].widthFreq);
+                        setState(() => _widthFreqSlider3 = _presets[position][2].widthFreq);
+
+                        setState(() => _opacityAmpSlider1 = _presets[position][0].opacityAmp);
+                        setState(() => _opacityAmpSlider2 = _presets[position][1].opacityAmp);
+                        setState(() => _opacityAmpSlider3 = _presets[position][2].opacityAmp);
+
+                        setState(() => _opacityFreqSlider1 = _presets[position][0].opacityFreq);
+                        setState(() => _opacityFreqSlider2 = _presets[position][1].opacityFreq);
+                        setState(() => _opacityFreqSlider3 = _presets[position][2].opacityFreq);
 
                         setState(() => _oscillatorParams1.length = _presets[position][0].length);
                         setState(() => _oscillatorParams2.length = _presets[position][1].length);
                         setState(() => _oscillatorParams3.length = _presets[position][2].length);
 
                         setState(() => _oscillatorParams1.widthAmp = _presets[position][0].widthAmp);
+                        setState(() => _oscillatorParams2.widthAmp = _presets[position][1].widthAmp);
+                        setState(() => _oscillatorParams3.widthAmp = _presets[position][2].widthAmp);
+
+                        setState(() => _oscillatorParams1.widthFreq = _presets[position][0].widthFreq);
+                        setState(() => _oscillatorParams2.widthFreq = _presets[position][1].widthFreq);
+                        setState(() => _oscillatorParams3.widthFreq = _presets[position][2].widthFreq);
+
+                        setState(() => _oscillatorParams1.opacityAmp = _presets[position][0].opacityAmp);
+                        setState(() => _oscillatorParams2.opacityAmp = _presets[position][1].opacityAmp);
+                        setState(() => _oscillatorParams3.opacityAmp = _presets[position][2].opacityAmp);
+
+                        setState(() => _oscillatorParams1.opacityFreq = _presets[position][0].opacityFreq);
+                        setState(() => _oscillatorParams2.opacityFreq = _presets[position][1].opacityFreq);
+                        setState(() => _oscillatorParams3.opacityFreq = _presets[position][2].opacityFreq);
                       },
                       trailing: IconButton(
                         icon: const Icon(Icons.remove_circle_outline),
