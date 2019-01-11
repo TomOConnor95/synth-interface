@@ -229,8 +229,7 @@ class _MyHomePageState extends State<MyHomePage>
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: <Widget>[
             Container(
                 height: 170,
@@ -297,7 +296,8 @@ class _MyHomePageState extends State<MyHomePage>
                 SliderTileInt(_opacityFreqSlider3, _color3, _opacityFreqSlider3Callback, 'OpacFreq'),
               ]
             ),
-            Expanded(
+            SizedBox(
+              height: 500,
               child: ListView.builder(
               itemCount: _presets.length,
               padding: const EdgeInsets.all(3.0),
