@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -146,31 +145,30 @@ class _MyHomePageState extends State<MyHomePage>
 
   var _presets = new List<List<OscillatorParams>>();
 
-  Animation<double> _angleAnimation;
-  AnimationController _controller;
+  
 
   void _savePreset() {
     var _params1 = OscillatorParams(
     _lengthSlider1,
     _widthAmpSlider1,
-    3,
-    0.2,
-    4,
+    _widthFreqSlider1,
+    _opacityAmpSlider1,
+    _opacityFreqSlider1,
   );
   var _params2 = OscillatorParams(
     _lengthSlider2,
     _widthAmpSlider2,
-    5,
-    0.1,
-    4,
+    _widthFreqSlider2,
+    _opacityAmpSlider2,
+    _opacityFreqSlider2,
   );
 
   var _params3 = OscillatorParams(
     _lengthSlider3,
     _widthAmpSlider3,
-    3,
-    0.1,
-    10,
+    _widthFreqSlider3,
+    _opacityAmpSlider3,
+    _opacityFreqSlider3,
   );
     var preset = [_params1, _params2, _params3];
 
@@ -185,6 +183,9 @@ class _MyHomePageState extends State<MyHomePage>
       color: Colors.lightBlueAccent,
     );
   }
+
+  Animation<double> _angleAnimation;
+  AnimationController _controller;
 
   @override
   void initState() {
