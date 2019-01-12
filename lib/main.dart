@@ -34,6 +34,10 @@ class _MyHomePageState extends State<MyHomePage>
   double _lengthSlider2 = 0.7;
   double _lengthSlider3 = 0.8;
 
+  int _freqSlider1 = 2;
+  int _freqSlider2 = 3;
+  int _freqSlider3 = 4;
+
   double _widthAmpSlider1 = 0.7;
   double _widthAmpSlider2 = 0.8;
   double _widthAmpSlider3 = 0.9;
@@ -61,6 +65,19 @@ class _MyHomePageState extends State<MyHomePage>
   _lengthSlider3Callback(newValue) {
     setState(() => _lengthSlider3 = newValue);
     setState(() => _oscillatorParams3.length = newValue);
+  }
+
+  _freqSlider1Callback(newValue) {
+    setState(() => _freqSlider1 = newValue);
+    setState(() => _oscillatorParams1.freq = newValue);
+  }
+  _freqSlider2Callback(newValue) {
+    setState(() => _freqSlider2 = newValue);
+    setState(() => _oscillatorParams2.freq = newValue);
+  }
+  _freqSlider3Callback(newValue) {
+    setState(() => _freqSlider3 = newValue);
+    setState(() => _oscillatorParams3.freq = newValue);
   }
 
   _widthAmpSlider1Callback(newValue) {
@@ -121,22 +138,23 @@ class _MyHomePageState extends State<MyHomePage>
 
   var _oscillatorParams1 = OscillatorParams(
     0.6,
+    2,
     0.7,
     3,
     0.2,
     4,
   );
-
   var _oscillatorParams2 = OscillatorParams(
     0.7,
+    3,
     0.6,
     5,
     0.1,
     4,
   );
-
   var _oscillatorParams3 = OscillatorParams(
     0.8,
+    4,
     0.1,
     3,
     0.1,
@@ -145,35 +163,35 @@ class _MyHomePageState extends State<MyHomePage>
 
   var _presets = new List<List<OscillatorParams>>();
 
-  
-
   void _savePreset() {
     var _params1 = OscillatorParams(
     _lengthSlider1,
+    _freqSlider1,
     _widthAmpSlider1,
     _widthFreqSlider1,
     _opacityAmpSlider1,
     _opacityFreqSlider1,
-  );
-  var _params2 = OscillatorParams(
-    _lengthSlider2,
-    _widthAmpSlider2,
-    _widthFreqSlider2,
-    _opacityAmpSlider2,
-    _opacityFreqSlider2,
-  );
-
-  var _params3 = OscillatorParams(
-    _lengthSlider3,
-    _widthAmpSlider3,
-    _widthFreqSlider3,
-    _opacityAmpSlider3,
-    _opacityFreqSlider3,
-  );
+    );
+    var _params2 = OscillatorParams(
+      _lengthSlider2,
+      _freqSlider2,
+      _widthAmpSlider2,
+      _widthFreqSlider2,
+      _opacityAmpSlider2,
+      _opacityFreqSlider2,
+    );
+    var _params3 = OscillatorParams(
+      _lengthSlider3,
+      _freqSlider3,
+      _widthAmpSlider3,
+      _widthFreqSlider3,
+      _opacityAmpSlider3,
+      _opacityFreqSlider3,
+    );
     var preset = [_params1, _params2, _params3];
 
     setState(() => _presets.add(preset));
-    print(_presets);
+    // print(_presets);
   }
 
   Widget get savePresetButton {
@@ -192,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage>
     super.initState();
 
     _controller = new AnimationController(
-        duration: const Duration(milliseconds: 8000), vsync: this);
+        duration: const Duration(milliseconds: 6000), vsync: this);
     _angleAnimation = new Tween(begin: 0.0, end: 360.0).animate(_controller)
       ..addListener(() {
         setState(() {
@@ -259,6 +277,7 @@ class _MyHomePageState extends State<MyHomePage>
               ),
               children: [
                 SliderTile(_lengthSlider1, _color1, _lengthSlider1Callback, 'Length'),
+                SliderTileInt(_freqSlider1, _color1, _freqSlider1Callback, 'Freq'),
                 SliderTile(_widthAmpSlider1, _color1, _widthAmpSlider1Callback, 'WidthAmp'),
                 SliderTileInt(_widthFreqSlider1, _color1, _widthFreqSlider1Callback, 'WidthFreq'),
                 SliderTile(_opacityAmpSlider1, _color1, _opacityAmpSlider1Callback, 'OpacAmp'),
@@ -275,6 +294,7 @@ class _MyHomePageState extends State<MyHomePage>
               ),
               children: [
                 SliderTile(_lengthSlider2, _color2, _lengthSlider2Callback, 'Length'),
+                SliderTileInt(_freqSlider2, _color2, _freqSlider2Callback, 'Freq'),
                 SliderTile(_widthAmpSlider2, _color2, _widthAmpSlider2Callback, 'WidthAmp'),
                 SliderTileInt(_widthFreqSlider2, _color2, _widthFreqSlider2Callback, 'WidthFreq'),
                 SliderTile(_opacityAmpSlider2, _color2, _opacityAmpSlider2Callback, 'OpacAmp'),
@@ -291,6 +311,7 @@ class _MyHomePageState extends State<MyHomePage>
               ),
               children: [
                 SliderTile(_lengthSlider3, _color3, _lengthSlider3Callback, 'Length'),
+                SliderTileInt(_freqSlider3, _color3, _freqSlider3Callback, 'Freq'),
                 SliderTile(_widthAmpSlider3, _color3, _widthAmpSlider3Callback, 'WidthAmp'),
                 SliderTileInt(_widthFreqSlider3, _color3, _widthFreqSlider3Callback, 'WidthFreq'),
                 SliderTile(_opacityAmpSlider3, _color3, _opacityAmpSlider3Callback, 'OpacAmp'),
@@ -357,6 +378,10 @@ class _MyHomePageState extends State<MyHomePage>
                         setState(() => _lengthSlider1 = _presets[position][0].length);
                         setState(() => _lengthSlider2 = _presets[position][1].length);
                         setState(() => _lengthSlider3 = _presets[position][2].length);
+
+                        setState(() => _freqSlider1 = _presets[position][0].freq);
+                        setState(() => _freqSlider2 = _presets[position][1].freq);
+                        setState(() => _freqSlider3 = _presets[position][2].freq);
 
                         setState(() => _widthAmpSlider1 = _presets[position][0].widthAmp);
                         setState(() => _widthAmpSlider2 = _presets[position][1].widthAmp);

@@ -46,7 +46,7 @@ class MyPainter extends CustomPainter{
     double arcAngle = 2*pi* (percent/100);
     canvas.drawArc(
         new Rect.fromCircle(center: center, radius: radius),
-        0.65*pi,
+        (-pi/2) - (arcAngle/2),
         arcAngle,
         false,
         complete

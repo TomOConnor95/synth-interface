@@ -1,5 +1,6 @@
 class OscillatorParams {
   double length;
+  int freq;
   double widthAmp;
   int widthFreq;
   double opacityAmp;
@@ -7,6 +8,7 @@ class OscillatorParams {
 
   OscillatorParams(
     this.length,
+    this.freq,
     this.widthAmp,
     this.widthFreq,
     this.opacityAmp,

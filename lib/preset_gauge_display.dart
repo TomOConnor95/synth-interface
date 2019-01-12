@@ -17,6 +17,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
       children: <Widget>[
         OscillatorAnimation(
           oscillatorParams1.length*100,
+          oscillatorParams1.freq,
           oscillatorParams1.widthAmp,
           oscillatorParams1.widthFreq, 
           oscillatorParams1.opacityAmp, 
@@ -24,11 +25,12 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
           radius1,
           color1,
           width,
-          angleInRadians * 2,
+          angleInRadians,
           size,
         ),
         OscillatorAnimation(
           oscillatorParams2.length*100,
+          oscillatorParams2.freq,
           oscillatorParams2.widthAmp,
           oscillatorParams2.widthFreq, 
           oscillatorParams2.opacityAmp, 
@@ -36,11 +38,12 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
           radius2,
           color2,
           width,
-          angleInRadians * 3,
+          angleInRadians,
           size,
         ),
         OscillatorAnimation(
           oscillatorParams3.length*100,
+          oscillatorParams3.freq,
           oscillatorParams3.widthAmp,
           oscillatorParams3.widthFreq, 
           oscillatorParams3.opacityAmp, 
@@ -48,7 +51,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
           radius3,
           color3,
           width,
-          angleInRadians * 4,
+          angleInRadians,
           size,
         ),
       ],
@@ -57,6 +60,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
 
   Widget OscillatorAnimation(
     double length,
+    int freq,
     double widthAmp,
     int widthFreq, 
     double opacityAmp, 
@@ -68,14 +72,14 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
     double size,
       ) {
     return Transform.rotate(
-        angle: angleAnimationValue,
+        angle: angleAnimationValue * freq,
         child: Center(
           child: CircleSector(
               length,
               size,
               radius,
-              width * (2 + widthAmp *(sin(widthFreq * angleAnimationValue) - 1))/2,
-              color.withOpacity((2 + opacityAmp *(sin(opacityFreq * angleAnimationValue) - 1))/2)),
+              width * (2 + widthAmp *(cos(widthFreq * angleAnimationValue) - 1))/2,
+              color.withOpacity((2 + opacityAmp *(cos(opacityFreq * angleAnimationValue) - 1))/2)),
         ),
     );
   }
