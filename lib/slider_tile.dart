@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-
+import './parameter_value_display.dart';
 class SliderTile extends StatefulWidget {
 
-num sliderValue; 
-Color color;
-Function(num) callback;
-String label;
+  double sliderValue; 
+  Color color;
+  Function(num) callback;
+  String label;
 
-SliderTile(this.sliderValue, this.color, this.callback, this.label);
+  SliderTile(this.sliderValue, this.color, this.callback, this.label);
 
-@override
-_SliderTileState createState() => new _SliderTileState();
+  @override
+  _SliderTileState createState() => new _SliderTileState();
 }
 
 class _SliderTileState extends State<SliderTile>{
@@ -36,32 +36,19 @@ class _SliderTileState extends State<SliderTile>{
       ),
     );
   }
-
-  Widget ParameterValueDisplay (value, Color color){
-    return Container(
-      width: 60,
-      child: Text(
-        '${value.toStringAsFixed(2)}',
-        style: TextStyle(
-          color: color,
-          fontSize: 22,
-        ),
-      )
-    );
-  }
 }
 
 class SliderTileInt extends StatefulWidget {
 
-num sliderValue; 
-Color color;
-Function(num) callback;
-String label;
+  int sliderValue; 
+  Color color;
+  Function(num) callback;
+  String label;
 
-SliderTileInt(this.sliderValue, this.color, this.callback, this.label);
+  SliderTileInt(this.sliderValue, this.color, this.callback, this.label);
 
-@override
-_SliderTileIntState createState() => new _SliderTileIntState();
+  @override
+  _SliderTileIntState createState() => new _SliderTileIntState();
 }
 
 class _SliderTileIntState extends State<SliderTileInt>{
@@ -77,7 +64,7 @@ class _SliderTileIntState extends State<SliderTileInt>{
         fontSize: 20,
         ),
       ),
-      trailing: ParameterValueDisplay(widget.sliderValue, widget.color),
+      trailing: ParameterValueDisplayInt(widget.sliderValue, widget.color),
       title: Slider(
         activeColor: widget.color,
         min: 0,
@@ -86,22 +73,6 @@ class _SliderTileIntState extends State<SliderTileInt>{
         onChanged: (value) => widget.callback(value.toInt()),
         value: widget.sliderValue.toDouble(),
       ),
-    );
-  }
-
-  Widget ParameterValueDisplay (int value, Color color){
-    return Container(
-      width: 60,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16.0),
-        child: Text(
-          value.toString(),
-          style: TextStyle(
-            color: color,
-            fontSize: 22,
-          ),
-        ),
-      )
     );
   }
 }

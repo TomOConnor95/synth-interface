@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 import './slider_tile.dart';
+import './knob_tile.dart';
 
 void main() => runApp(MyApp());
 
@@ -278,7 +279,7 @@ class _MyHomePageState extends State<MyHomePage>
               children: [
                 SliderTile(_lengthSlider1, _color1, _lengthSlider1Callback, 'Length'),
                 SliderTileInt(_freqSlider1, _color1, _freqSlider1Callback, 'Freq'),
-                SliderTile(_widthAmpSlider1, _color1, _widthAmpSlider1Callback, 'WidthAmp'),
+                KnobTile(value:_widthAmpSlider1, min: 0, max: 1, color: _color1, callback: _widthAmpSlider1Callback, label: 'WidthAmp'),
                 SliderTileInt(_widthFreqSlider1, _color1, _widthFreqSlider1Callback, 'WidthFreq'),
                 SliderTile(_opacityAmpSlider1, _color1, _opacityAmpSlider1Callback, 'OpacAmp'),
                 SliderTileInt(_opacityFreqSlider1, _color1, _opacityFreqSlider1Callback, 'OpacFreq'),
@@ -295,7 +296,7 @@ class _MyHomePageState extends State<MyHomePage>
               children: [
                 SliderTile(_lengthSlider2, _color2, _lengthSlider2Callback, 'Length'),
                 SliderTileInt(_freqSlider2, _color2, _freqSlider2Callback, 'Freq'),
-                SliderTile(_widthAmpSlider2, _color2, _widthAmpSlider2Callback, 'WidthAmp'),
+                KnobTile(value:_widthAmpSlider2, min: 0, max: 1, color: _color2, callback: _widthAmpSlider2Callback, label: 'WidthAmp'),
                 SliderTileInt(_widthFreqSlider2, _color2, _widthFreqSlider2Callback, 'WidthFreq'),
                 SliderTile(_opacityAmpSlider2, _color2, _opacityAmpSlider2Callback, 'OpacAmp'),
                 SliderTileInt(_opacityFreqSlider2, _color2, _opacityFreqSlider2Callback, 'OpacFreq'),
@@ -312,7 +313,7 @@ class _MyHomePageState extends State<MyHomePage>
               children: [
                 SliderTile(_lengthSlider3, _color3, _lengthSlider3Callback, 'Length'),
                 SliderTileInt(_freqSlider3, _color3, _freqSlider3Callback, 'Freq'),
-                SliderTile(_widthAmpSlider3, _color3, _widthAmpSlider3Callback, 'WidthAmp'),
+                KnobTile(value:_widthAmpSlider3, min: 0, max: 1, color: _color3, callback: _widthAmpSlider3Callback, label: 'WidthAmp'),
                 SliderTileInt(_widthFreqSlider3, _color3, _widthFreqSlider3Callback, 'WidthFreq'),
                 SliderTile(_opacityAmpSlider3, _color3, _opacityAmpSlider3Callback, 'OpacAmp'),
                 SliderTileInt(_opacityFreqSlider3, _color3, _opacityFreqSlider3Callback, 'OpacFreq'),
