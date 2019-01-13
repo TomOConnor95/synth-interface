@@ -24,7 +24,8 @@ class KnobState extends State<Knob> {
   
   @override
   Widget build(BuildContext context) {
-    double angle = ((widget.value - widget.min) / (widget.max - widget.min)) * 1.8 * pi + - 0.9 * pi;
+    double normalisedValue = (widget.value - widget.min) / (widget.max - widget.min);
+    double angle = normalisedValue * 1.8 * pi + - 0.9 * pi;
     double size = widget.size;
     return Center(
       child: Container(
@@ -40,7 +41,14 @@ class KnobState extends State<Knob> {
             },
             child: ClipOval(
               child: Container(
-                color: widget.color,
+                decoration: BoxDecoration(
+                  color: widget.color.withAlpha((170 + normalisedValue*255/3).toInt()),
+                  borderRadius: BorderRadius.circular(25.0),
+                  border: Border.all(
+                    width: 3.0,
+                    color: widget.color.withAlpha((255 - normalisedValue*255).toInt()),
+                  ),
+                ),
                 child: Icon(Icons.arrow_upward,
                   color: Colors.white,
                   size: size * 0.75,
