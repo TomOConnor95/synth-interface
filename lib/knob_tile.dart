@@ -36,8 +36,8 @@ class _KnobTileState extends State<KnobTile>{
         children: <Widget>[ 
           Knob(
             color: widget.color,
-            min: 0.0,
-            max: 1.0,
+            min: widget.min,
+            max: widget.max,
             size: 40,
             onChanged: (value) => widget.callback(value),
             value: widget.value,
