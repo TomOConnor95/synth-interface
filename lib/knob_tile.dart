@@ -49,41 +49,48 @@ class _KnobTileState extends State<KnobTile>{
   }
 }
 
-// class KnobTileInt extends StatefulWidget {
+class KnobTileInt extends StatefulWidget {
 
-//   num sliderValue; 
-//   Color color;
-//   Function(num) callback;
-//   String label;
+  int value; 
+  int min;
+  int max;
 
-//   KnobTileInt(this.sliderValue, this.color, this.callback, this.label);
+  Color color;
+  Function(num) callback;
+  String label;
 
-//   @override
-//   _KnobTileIntState createState() => new _KnobTileIntState();
-// }
+  KnobTileInt({this.value, this.min, this.max, this.color, this.callback, this.label});
 
-// class _KnobTileIntState extends State<KnobTileInt>{
-//   @override
-//   Widget build(BuildContext context) {
-//       return ListTile(
-//       contentPadding: EdgeInsets.only(left: 16),
-//       dense: true,
-//       leading: Text(
-//         widget.label,
-//         style: TextStyle(
-//         color: widget.color,
-//         fontSize: 20,
-//         ),
-//       ),
-//       trailing: ParameterValueDisplayInt(widget.sliderValue, widget.color),
-//       title: Knob(
-//         color: widget.color,
-//         min: 0,
-//         max: 10,
-//         // divisions: 10,
-//         onChanged: (value) => widget.callback(value.toInt()),
-//         value: widget.sliderValue.toDouble(),
-//       ),
-//     );
-//   }
-// }
+  @override
+  _KnobTileIntState createState() => new _KnobTileIntState();
+}
+
+class _KnobTileIntState extends State<KnobTileInt>{
+  @override
+  Widget build(BuildContext context) {
+      return ListTile(
+      contentPadding: EdgeInsets.only(left: 16),
+      dense: true,
+      leading: Text(
+        widget.label,
+        style: TextStyle(
+        color: widget.color,
+        fontSize: 20,
+        ),
+      ),
+      title: Column(
+        children: <Widget>[
+          KnobInt(
+            color: widget.color,
+            min: 0,
+            max: 10,
+            size: 40,
+            onChanged: (value) => widget.callback(value.toInt()),
+            value: widget.value,
+          ),
+          ParameterValueDisplayInt(widget.value, widget.color, width: 30),
+        ],
+      ),
+    );
+  }
+}

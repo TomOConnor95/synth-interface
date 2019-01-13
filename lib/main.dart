@@ -280,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage>
                 SliderTile(_lengthSlider1, _color1, _lengthSlider1Callback, 'Length'),
                 SliderTileInt(_freqSlider1, _color1, _freqSlider1Callback, 'Freq'),
                 KnobTile(value:_widthAmpSlider1, min: 0, max: 1, color: _color1, callback: _widthAmpSlider1Callback, label: 'WidthAmp'),
-                SliderTileInt(_widthFreqSlider1, _color1, _widthFreqSlider1Callback, 'WidthFreq'),
+                KnobTileInt(value:_widthFreqSlider1, min: 0, max: 10, color: _color1, callback: _widthFreqSlider1Callback, label: 'WidthFreq'),
                 SliderTile(_opacityAmpSlider1, _color1, _opacityAmpSlider1Callback, 'OpacAmp'),
                 SliderTileInt(_opacityFreqSlider1, _color1, _opacityFreqSlider1Callback, 'OpacFreq'),
               ]

@@ -25,17 +25,19 @@ class ParameterValueDisplay extends StatelessWidget {
 
 class ParameterValueDisplayInt extends StatelessWidget {
 
-  ParameterValueDisplayInt(this.value, this.color);
+  ParameterValueDisplayInt(this.value, this.color, {this.width});
 
   final int value; 
   final Color color;
+  double width = 45;
   
   @override
   Widget build(BuildContext context){
     return Container(
-      width: 45,
+      width: width,
       child: Text(
         value.toString(),
+        textAlign: TextAlign.center,
         style: TextStyle(
           color: color,
           fontSize: 22,

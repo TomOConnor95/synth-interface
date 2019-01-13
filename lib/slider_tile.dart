@@ -64,7 +64,7 @@ class _SliderTileIntState extends State<SliderTileInt>{
         fontSize: 20,
         ),
       ),
-      trailing: ParameterValueDisplayInt(widget.sliderValue, widget.color),
+      trailing: ParameterValueDisplayInt(widget.sliderValue, widget.color, width: 48),
       title: Slider(
         activeColor: widget.color,
         min: 0,
