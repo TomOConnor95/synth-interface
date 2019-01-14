@@ -9,7 +9,7 @@ class KnobTile extends StatefulWidget {
   double max;
 
   Color color;
-  Function(num) callback;
+  Function(double) callback;
   String label;
 
   KnobTile({this.value, this.min, this.max, this.color, this.callback, this.label});
@@ -27,8 +27,8 @@ class _KnobTileState extends State<KnobTile>{
       leading: Text(
         widget.label,
         style: TextStyle(
-        color: widget.color,
-        fontSize: 20,
+          color: widget.color,
+          fontSize: 20,
         ),
       ),
       title: Column(
@@ -56,7 +56,7 @@ class KnobTileInt extends StatefulWidget {
   int max;
 
   Color color;
-  Function(num) callback;
+  Function(int) callback;
   String label;
 
   KnobTileInt({this.value, this.min, this.max, this.color, this.callback, this.label});

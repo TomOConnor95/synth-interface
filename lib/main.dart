@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 import './slider_tile.dart';
-import './knob_tile.dart';
+import './amp_freq_knobs.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         // This is the theme of your application.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Preset Editor'),
     );
   }
 }
@@ -252,6 +252,7 @@ class _MyHomePageState extends State<MyHomePage>
         child: ListView(
           children: <Widget>[
             Container(
+                padding: EdgeInsets.only(top: 15),
                 height: 170,
                 width: 200,
                 child: Transform.scale(
@@ -279,10 +280,38 @@ class _MyHomePageState extends State<MyHomePage>
               children: [
                 SliderTile(_lengthSlider1, _color1, _lengthSlider1Callback, 'Length'),
                 SliderTileInt(_freqSlider1, _color1, _freqSlider1Callback, 'Freq'),
-                KnobTile(value:_widthAmpSlider1, min: 0, max: 1, color: _color1, callback: _widthAmpSlider1Callback, label: 'WidthAmp'),
-                KnobTileInt(value:_widthFreqSlider1, min: 0, max: 10, color: _color1, callback: _widthFreqSlider1Callback, label: 'WidthFreq'),
-                SliderTile(_opacityAmpSlider1, _color1, _opacityAmpSlider1Callback, 'OpacAmp'),
-                SliderTileInt(_opacityFreqSlider1, _color1, _opacityFreqSlider1Callback, 'OpacFreq'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      AmpFreqKnobs(
+                        ampValue: _widthAmpSlider1,
+                        ampMin: 0,
+                        ampMax: 1,
+                        ampCallback: _widthAmpSlider1Callback,
+                        freqValue: _widthFreqSlider1,
+                        freqMin: 0,
+                        freqMax: 10,
+                        freqCallback: _widthFreqSlider1Callback,
+                        label: 'Width Mod',
+                        color: _color1,
+                      ),
+                      AmpFreqKnobs(
+                        ampValue: _opacityAmpSlider1,
+                        ampMin: 0,
+                        ampMax: 1,
+                        ampCallback: _opacityAmpSlider1Callback,
+                        freqValue: _opacityFreqSlider1,
+                        freqMin: 0,
+                        freqMax: 10,
+                        freqCallback: _opacityFreqSlider1Callback,
+                        label: 'Opacity Mod',
+                        color: _color1,
+                      ),
+                    ]
+                  ),
+                ),
               ]
             ),
             ExpansionTile(
@@ -296,10 +325,38 @@ class _MyHomePageState extends State<MyHomePage>
               children: [
                 SliderTile(_lengthSlider2, _color2, _lengthSlider2Callback, 'Length'),
                 SliderTileInt(_freqSlider2, _color2, _freqSlider2Callback, 'Freq'),
-                KnobTile(value:_widthAmpSlider2, min: 0, max: 1, color: _color2, callback: _widthAmpSlider2Callback, label: 'WidthAmp'),
-                SliderTileInt(_widthFreqSlider2, _color2, _widthFreqSlider2Callback, 'WidthFreq'),
-                SliderTile(_opacityAmpSlider2, _color2, _opacityAmpSlider2Callback, 'OpacAmp'),
-                SliderTileInt(_opacityFreqSlider2, _color2, _opacityFreqSlider2Callback, 'OpacFreq'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      AmpFreqKnobs(
+                        ampValue: _widthAmpSlider2,
+                        ampMin: 0,
+                        ampMax: 1,
+                        ampCallback: _widthAmpSlider2Callback,
+                        freqValue: _widthFreqSlider2,
+                        freqMin: 0,
+                        freqMax: 10,
+                        freqCallback: _widthFreqSlider2Callback,
+                        label: 'Width Mod',
+                        color: _color2,
+                      ),
+                      AmpFreqKnobs(
+                        ampValue: _opacityAmpSlider2,
+                        ampMin: 0,
+                        ampMax: 1,
+                        ampCallback: _opacityAmpSlider2Callback,
+                        freqValue: _opacityFreqSlider2,
+                        freqMin: 0,
+                        freqMax: 10,
+                        freqCallback: _opacityFreqSlider2Callback,
+                        label: 'Opacity Mod',
+                        color: _color2,
+                      ),
+                    ]
+                  ),
+                ),
               ]
             ),
             ExpansionTile(
@@ -313,10 +370,38 @@ class _MyHomePageState extends State<MyHomePage>
               children: [
                 SliderTile(_lengthSlider3, _color3, _lengthSlider3Callback, 'Length'),
                 SliderTileInt(_freqSlider3, _color3, _freqSlider3Callback, 'Freq'),
-                KnobTile(value:_widthAmpSlider3, min: 0, max: 1, color: _color3, callback: _widthAmpSlider3Callback, label: 'WidthAmp'),
-                SliderTileInt(_widthFreqSlider3, _color3, _widthFreqSlider3Callback, 'WidthFreq'),
-                SliderTile(_opacityAmpSlider3, _color3, _opacityAmpSlider3Callback, 'OpacAmp'),
-                SliderTileInt(_opacityFreqSlider3, _color3, _opacityFreqSlider3Callback, 'OpacFreq'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      AmpFreqKnobs(
+                        ampValue: _widthAmpSlider3,
+                        ampMin: 0,
+                        ampMax: 1,
+                        ampCallback: _widthAmpSlider3Callback,
+                        freqValue: _widthFreqSlider3,
+                        freqMin: 0,
+                        freqMax: 10,
+                        freqCallback: _widthFreqSlider3Callback,
+                        label: 'Width Mod',
+                        color: _color3,
+                      ),
+                      AmpFreqKnobs(
+                        ampValue: _opacityAmpSlider3,
+                        ampMin: 0,
+                        ampMax: 1,
+                        ampCallback: _opacityAmpSlider3Callback,
+                        freqValue: _opacityFreqSlider3,
+                        freqMin: 0,
+                        freqMax: 10,
+                        freqCallback: _opacityFreqSlider3Callback,
+                        label: 'Opacity Mod',
+                        color: _color3,
+                      ),
+                    ]
+                  ),
+                ),
               ]
             ),
             SizedBox(
@@ -329,39 +414,11 @@ class _MyHomePageState extends State<MyHomePage>
                   children: <Widget>[
                     Divider(height: 5.0),
                     ListTile(
-                      title: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Text(
-                                '${_presets[position][0].length.toStringAsFixed(2)}',
-                                // 'Hello',
-                                style: TextStyle(
-                                  fontSize: 22.0,
-                                  color: _color1,
-                                ),
-                              ),
-                              Text(
-                                '${_presets[position][1].length.toStringAsFixed(2)}',
-                                // 'Hello',
-                                style: TextStyle(
-                                  fontSize: 22.0,
-                                  color: _color2,
-                                ),
-                              ),
-                              Text(
-                                '${_presets[position][2].length.toStringAsFixed(2)}',
-                                // 'Hello',
-                                style: TextStyle(
-                                  fontSize: 22.0,
-                                  color: _color3,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                      title: Text('Preset ${position + 1}',
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          color: _color1,
+                        ),
                       ),
                       leading: Container(
                         height: 70,
@@ -376,49 +433,51 @@ class _MyHomePageState extends State<MyHomePage>
                             )),
                       ),
                       onTap: () {
-                        setState(() => _lengthSlider1 = _presets[position][0].length);
-                        setState(() => _lengthSlider2 = _presets[position][1].length);
-                        setState(() => _lengthSlider3 = _presets[position][2].length);
+                        setState(() {
+                          _lengthSlider1 = _presets[position][0].length;
+                          _lengthSlider2 = _presets[position][1].length;
+                          _lengthSlider3 = _presets[position][2].length;
 
-                        setState(() => _freqSlider1 = _presets[position][0].freq);
-                        setState(() => _freqSlider2 = _presets[position][1].freq);
-                        setState(() => _freqSlider3 = _presets[position][2].freq);
+                          _freqSlider1 = _presets[position][0].freq;
+                          _freqSlider2 = _presets[position][1].freq;
+                          _freqSlider3 = _presets[position][2].freq;
 
-                        setState(() => _widthAmpSlider1 = _presets[position][0].widthAmp);
-                        setState(() => _widthAmpSlider2 = _presets[position][1].widthAmp);
-                        setState(() => _widthAmpSlider3 = _presets[position][2].widthAmp);
+                          _widthAmpSlider1 = _presets[position][0].widthAmp;
+                          _widthAmpSlider2 = _presets[position][1].widthAmp;
+                          _widthAmpSlider3 = _presets[position][2].widthAmp;
 
-                        setState(() => _widthFreqSlider1 = _presets[position][0].widthFreq);
-                        setState(() => _widthFreqSlider2 = _presets[position][1].widthFreq);
-                        setState(() => _widthFreqSlider3 = _presets[position][2].widthFreq);
+                          _widthFreqSlider1 = _presets[position][0].widthFreq;
+                          _widthFreqSlider2 = _presets[position][1].widthFreq;
+                          _widthFreqSlider3 = _presets[position][2].widthFreq;
 
-                        setState(() => _opacityAmpSlider1 = _presets[position][0].opacityAmp);
-                        setState(() => _opacityAmpSlider2 = _presets[position][1].opacityAmp);
-                        setState(() => _opacityAmpSlider3 = _presets[position][2].opacityAmp);
+                          _opacityAmpSlider1 = _presets[position][0].opacityAmp;
+                          _opacityAmpSlider2 = _presets[position][1].opacityAmp;
+                          _opacityAmpSlider3 = _presets[position][2].opacityAmp;
 
-                        setState(() => _opacityFreqSlider1 = _presets[position][0].opacityFreq);
-                        setState(() => _opacityFreqSlider2 = _presets[position][1].opacityFreq);
-                        setState(() => _opacityFreqSlider3 = _presets[position][2].opacityFreq);
+                          _opacityFreqSlider1 = _presets[position][0].opacityFreq;
+                          _opacityFreqSlider2 = _presets[position][1].opacityFreq;
+                          _opacityFreqSlider3 = _presets[position][2].opacityFreq;
 
-                        setState(() => _oscillatorParams1.length = _presets[position][0].length);
-                        setState(() => _oscillatorParams2.length = _presets[position][1].length);
-                        setState(() => _oscillatorParams3.length = _presets[position][2].length);
+                          _oscillatorParams1.length = _presets[position][0].length;
+                          _oscillatorParams2.length = _presets[position][1].length;
+                          _oscillatorParams3.length = _presets[position][2].length;
 
-                        setState(() => _oscillatorParams1.widthAmp = _presets[position][0].widthAmp);
-                        setState(() => _oscillatorParams2.widthAmp = _presets[position][1].widthAmp);
-                        setState(() => _oscillatorParams3.widthAmp = _presets[position][2].widthAmp);
+                          _oscillatorParams1.widthAmp = _presets[position][0].widthAmp;
+                          _oscillatorParams2.widthAmp = _presets[position][1].widthAmp;
+                          _oscillatorParams3.widthAmp = _presets[position][2].widthAmp;
 
-                        setState(() => _oscillatorParams1.widthFreq = _presets[position][0].widthFreq);
-                        setState(() => _oscillatorParams2.widthFreq = _presets[position][1].widthFreq);
-                        setState(() => _oscillatorParams3.widthFreq = _presets[position][2].widthFreq);
+                          _oscillatorParams1.widthFreq = _presets[position][0].widthFreq;
+                          _oscillatorParams2.widthFreq = _presets[position][1].widthFreq;
+                          _oscillatorParams3.widthFreq = _presets[position][2].widthFreq;
 
-                        setState(() => _oscillatorParams1.opacityAmp = _presets[position][0].opacityAmp);
-                        setState(() => _oscillatorParams2.opacityAmp = _presets[position][1].opacityAmp);
-                        setState(() => _oscillatorParams3.opacityAmp = _presets[position][2].opacityAmp);
+                          _oscillatorParams1.opacityAmp = _presets[position][0].opacityAmp;
+                          _oscillatorParams2.opacityAmp = _presets[position][1].opacityAmp;
+                          _oscillatorParams3.opacityAmp = _presets[position][2].opacityAmp;
 
-                        setState(() => _oscillatorParams1.opacityFreq = _presets[position][0].opacityFreq);
-                        setState(() => _oscillatorParams2.opacityFreq = _presets[position][1].opacityFreq);
-                        setState(() => _oscillatorParams3.opacityFreq = _presets[position][2].opacityFreq);
+                          _oscillatorParams1.opacityFreq = _presets[position][0].opacityFreq;
+                          _oscillatorParams2.opacityFreq = _presets[position][1].opacityFreq;
+                          _oscillatorParams3.opacityFreq = _presets[position][2].opacityFreq;
+                        });
                       },
                       trailing: IconButton(
                         icon: const Icon(Icons.remove_circle_outline),
