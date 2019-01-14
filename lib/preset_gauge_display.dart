@@ -4,7 +4,7 @@ import './circle_sector.dart';
 import './oscillator_params.dart';
 
 
-Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, OscillatorParams oscillatorParams2, Color color2, OscillatorParams oscillatorParams3, Color color3, double animationAngle) {
+Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, OscillatorParams oscillatorParams2, OscillatorParams oscillatorParams3, double animationAngle) {
     double angleInRadians = animationAngle / 360 * 2 * pi;
     double size = 100;
     double width = 8;
@@ -23,7 +23,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
           oscillatorParams1.opacityAmp, 
           oscillatorParams1.opacityFreq,
           radius1,
-          color1,
+          oscillatorParams1.color,
           width,
           angleInRadians,
           size,
@@ -36,7 +36,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
           oscillatorParams2.opacityAmp, 
           oscillatorParams2.opacityFreq,
           radius2,
-          color2,
+          oscillatorParams2.color,
           width,
           angleInRadians,
           size,
@@ -49,7 +49,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, Color color1, Osci
           oscillatorParams3.opacityAmp, 
           oscillatorParams3.opacityFreq,
           radius3,
-          color3,
+          oscillatorParams3.color,
           width,
           angleInRadians,
           size,

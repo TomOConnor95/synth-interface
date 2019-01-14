@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class OscillatorParams {
   double length;
   int freq;
@@ -5,13 +7,15 @@ class OscillatorParams {
   int widthFreq;
   double opacityAmp;
   int opacityFreq;
+  Color color;
 
-  OscillatorParams(
+  OscillatorParams({
     this.length,
     this.freq,
     this.widthAmp,
     this.widthFreq,
     this.opacityAmp,
-    this.opacityFreq
-  );
+    this.opacityFreq,
+    this.color,
+  });
 }

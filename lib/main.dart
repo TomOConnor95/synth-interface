@@ -4,6 +4,9 @@ import './oscillator_params.dart';
 import './slider_tile.dart';
 import './amp_freq_knobs.dart';
 
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_colorpicker/utils.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -31,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
+
   double _lengthSlider1 = 0.3;
   double _lengthSlider2 = 0.7;
   double _lengthSlider3 = 0.8;
@@ -40,16 +44,16 @@ class _MyHomePageState extends State<MyHomePage>
   int _freqSlider3 = 4;
 
   double _widthAmpSlider1 = 0.7;
-  double _widthAmpSlider2 = 0.8;
-  double _widthAmpSlider3 = 0.9;
+  double _widthAmpSlider2 = 0.6;
+  double _widthAmpSlider3 = 0.1;
 
   int _widthFreqSlider1 = 2;
   int _widthFreqSlider2 = 3;
   int _widthFreqSlider3 = 4;
 
-  double _opacityAmpSlider1 = 0.7;
-  double _opacityAmpSlider2 = 0.8;
-  double _opacityAmpSlider3 = 0.9;
+  double _opacityAmpSlider1 = 0.1;
+  double _opacityAmpSlider2 = 0.2;
+  double _opacityAmpSlider3 = 0.2;
 
   int _opacityFreqSlider1 = 3;
   int _opacityFreqSlider2 = 4;
@@ -133,66 +137,86 @@ class _MyHomePageState extends State<MyHomePage>
     setState(() => _oscillatorParams3.opacityFreq = newValue);
   }
 
+
+  var _oscillatorParams1 = OscillatorParams(
+    length: 0.3,
+    freq: 2,
+    widthAmp: 0.7,
+    widthFreq: 3,
+    opacityAmp: 0.2,
+    opacityFreq: 4,
+    color: Colors.indigoAccent,
+  );
+  var _oscillatorParams2 = OscillatorParams(
+    length: 0.7,
+    freq: 3,
+    widthAmp: 0.6,
+    widthFreq: 5,
+    opacityAmp: 0.1,
+    opacityFreq: 4,
+    color: Colors.red,
+  );
+  var _oscillatorParams3 = OscillatorParams(
+    length: 0.8,
+    freq: 4,
+    widthAmp: 0.1,
+    widthFreq: 3,
+    opacityAmp: 0.1,
+    opacityFreq: 10, 
+    color: Colors.green,
+  );
+
   Color _color1 = Colors.indigoAccent;
   Color _color2 = Colors.red;
   Color _color3 = Colors.green;
 
-  var _oscillatorParams1 = OscillatorParams(
-    0.6,
-    2,
-    0.7,
-    3,
-    0.2,
-    4,
-  );
-  var _oscillatorParams2 = OscillatorParams(
-    0.7,
-    3,
-    0.6,
-    5,
-    0.1,
-    4,
-  );
-  var _oscillatorParams3 = OscillatorParams(
-    0.8,
-    4,
-    0.1,
-    3,
-    0.1,
-    10,
-  );
+  ValueChanged<Color> onColorChanged;
+  changeColor1(Color color) {
+    setState(() => _color1 = color);
+    setState(() => _oscillatorParams1.color = color);
+  }
+  changeColor2(Color color) {
+    setState(() => _color2 = color);
+    setState(() => _oscillatorParams2.color = color);
+  }
+  changeColor3(Color color) {
+    setState(() => _color3 = color);
+    setState(() => _oscillatorParams3.color = color);
+  }
 
   var _presets = new List<List<OscillatorParams>>();
 
   void _savePreset() {
     var _params1 = OscillatorParams(
-    _lengthSlider1,
-    _freqSlider1,
-    _widthAmpSlider1,
-    _widthFreqSlider1,
-    _opacityAmpSlider1,
-    _opacityFreqSlider1,
+      length: _lengthSlider1,
+      freq: _freqSlider1,
+      widthAmp: _widthAmpSlider1,
+      widthFreq: _widthFreqSlider1,
+      opacityAmp: _opacityAmpSlider1,
+      opacityFreq: _opacityFreqSlider1,
+      color: _color1,
     );
     var _params2 = OscillatorParams(
-      _lengthSlider2,
-      _freqSlider2,
-      _widthAmpSlider2,
-      _widthFreqSlider2,
-      _opacityAmpSlider2,
-      _opacityFreqSlider2,
+      length: _lengthSlider2,
+      freq: _freqSlider2,
+      widthAmp: _widthAmpSlider2,
+      widthFreq: _widthFreqSlider2,
+      opacityAmp: _opacityAmpSlider2,
+      opacityFreq: _opacityFreqSlider2,
+      color: _color2,
     );
     var _params3 = OscillatorParams(
-      _lengthSlider3,
-      _freqSlider3,
-      _widthAmpSlider3,
-      _widthFreqSlider3,
-      _opacityAmpSlider3,
-      _opacityFreqSlider3,
+      length: _lengthSlider3,
+      freq: _freqSlider3,
+      widthAmp: _widthAmpSlider3,
+      widthFreq: _widthFreqSlider3,
+      opacityAmp: _opacityAmpSlider3,
+      opacityFreq: _opacityFreqSlider3,
+      color: _color3,
     );
     var preset = [_params1, _params2, _params3];
 
     setState(() => _presets.add(preset));
-    // print(_presets);
   }
 
   Widget get savePresetButton {
@@ -258,9 +282,9 @@ class _MyHomePageState extends State<MyHomePage>
                 child: Transform.scale(
                     scale: 2,
                     child: presetGaugeDisplay(
-                      _oscillatorParams1, _color1,
-                      _oscillatorParams2, _color2,
-                      _oscillatorParams3, _color3,
+                      _oscillatorParams1,
+                      _oscillatorParams2,
+                      _oscillatorParams3,
                       _angleAnimation.value,
                     ))),
             
@@ -270,16 +294,51 @@ class _MyHomePageState extends State<MyHomePage>
             ),
 
             ExpansionTile(
-              title: Text(
-                'Oscillator 1',
-                style: TextStyle(
-                color: _color1,
-                fontSize: 22,
-                ),
+              title: Row(
+                children: <Widget> [
+                  Text(
+                    'Oscillator 1',
+                    style: TextStyle(
+                    color: _oscillatorParams1.color,
+                    fontSize: 22,
+                    ),
+                  ),
+                  RaisedButton(
+                    shape: CircleBorder(),
+                    elevation: 3.0,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            titlePadding: const EdgeInsets.all(0.0),
+                            contentPadding: const EdgeInsets.all(0.0),
+                            content: SingleChildScrollView(
+                              child: ColorPicker(
+                                pickerColor: _oscillatorParams1.color,
+                                onColorChanged: changeColor1,
+                                colorPickerWidth: 1000.0,
+                                pickerAreaHeightPercent: 0.7,
+                                enableAlpha: false,
+                                enableLabel: false,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Icon(Icons.color_lens,
+                      color: useWhiteForeground(_oscillatorParams1.color)
+                        ? const Color(0xffffffff)
+                        : const Color(0xff000000),
+                    ),
+                    color: _oscillatorParams1.color, 
+                  ),
+                ]
               ),
               children: [
-                SliderTile(_lengthSlider1, _color1, _lengthSlider1Callback, 'Length'),
-                SliderTileInt(_freqSlider1, _color1, _freqSlider1Callback, 'Freq'),
+                SliderTile(_lengthSlider1, _oscillatorParams1.color, _lengthSlider1Callback, 'Length'),
+                SliderTileInt(_freqSlider1, _oscillatorParams1.color, _freqSlider1Callback, 'Freq'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -295,7 +354,7 @@ class _MyHomePageState extends State<MyHomePage>
                         freqMax: 10,
                         freqCallback: _widthFreqSlider1Callback,
                         label: 'Width Mod',
-                        color: _color1,
+                        color: _oscillatorParams1.color,
                       ),
                       AmpFreqKnobs(
                         ampValue: _opacityAmpSlider1,
@@ -307,7 +366,7 @@ class _MyHomePageState extends State<MyHomePage>
                         freqMax: 10,
                         freqCallback: _opacityFreqSlider1Callback,
                         label: 'Opacity Mod',
-                        color: _color1,
+                        color: _oscillatorParams1.color,
                       ),
                     ]
                   ),
@@ -315,16 +374,51 @@ class _MyHomePageState extends State<MyHomePage>
               ]
             ),
             ExpansionTile(
-              title: Text(
-                'Oscillator 2',
-                style: TextStyle(
-                color: _color2,
-                fontSize: 22,
-                ),
+              title: Row(
+                children: <Widget> [
+                  Text(
+                    'Oscillator 2',
+                    style: TextStyle(
+                    color: _oscillatorParams2.color,
+                    fontSize: 22,
+                    ),
+                  ),
+                  RaisedButton(
+                    shape: CircleBorder(),
+                    elevation: 3.0,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            titlePadding: const EdgeInsets.all(0.0),
+                            contentPadding: const EdgeInsets.all(0.0),
+                            content: SingleChildScrollView(
+                              child: ColorPicker(
+                                pickerColor: _oscillatorParams2.color,
+                                onColorChanged: changeColor2,
+                                colorPickerWidth: 1000.0,
+                                pickerAreaHeightPercent: 0.7,
+                                enableAlpha: false,
+                                enableLabel: false,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Icon(Icons.color_lens,
+                      color: useWhiteForeground(_oscillatorParams2.color)
+                        ? const Color(0xffffffff)
+                        : const Color(0xff000000),
+                    ),
+                    color: _oscillatorParams2.color, 
+                  ),
+                ]
               ),
               children: [
-                SliderTile(_lengthSlider2, _color2, _lengthSlider2Callback, 'Length'),
-                SliderTileInt(_freqSlider2, _color2, _freqSlider2Callback, 'Freq'),
+                SliderTile(_lengthSlider2, _oscillatorParams2.color, _lengthSlider2Callback, 'Length'),
+                SliderTileInt(_freqSlider2, _oscillatorParams2.color, _freqSlider2Callback, 'Freq'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -340,7 +434,7 @@ class _MyHomePageState extends State<MyHomePage>
                         freqMax: 10,
                         freqCallback: _widthFreqSlider2Callback,
                         label: 'Width Mod',
-                        color: _color2,
+                        color: _oscillatorParams2.color,
                       ),
                       AmpFreqKnobs(
                         ampValue: _opacityAmpSlider2,
@@ -352,7 +446,7 @@ class _MyHomePageState extends State<MyHomePage>
                         freqMax: 10,
                         freqCallback: _opacityFreqSlider2Callback,
                         label: 'Opacity Mod',
-                        color: _color2,
+                        color: _oscillatorParams2.color,
                       ),
                     ]
                   ),
@@ -360,16 +454,51 @@ class _MyHomePageState extends State<MyHomePage>
               ]
             ),
             ExpansionTile(
-              title: Text(
-                'Oscillator 3',
-                style: TextStyle(
-                color: _color3,
-                fontSize: 22,
-                ),
+              title: Row(
+                children: <Widget> [
+                  Text(
+                    'Oscillator 3',
+                    style: TextStyle(
+                    color: _oscillatorParams3.color,
+                    fontSize: 22,
+                    ),
+                  ),
+                  RaisedButton(
+                    shape: CircleBorder(),
+                    elevation: 3.0,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            titlePadding: const EdgeInsets.all(0.0),
+                            contentPadding: const EdgeInsets.all(0.0),
+                            content: SingleChildScrollView(
+                              child: ColorPicker(
+                                pickerColor: _oscillatorParams3.color,
+                                onColorChanged: changeColor3,
+                                colorPickerWidth: 1000.0,
+                                pickerAreaHeightPercent: 0.7,
+                                enableAlpha: false,
+                                enableLabel: false,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Icon(Icons.color_lens,
+                      color: useWhiteForeground(_oscillatorParams3.color)
+                        ? const Color(0xffffffff)
+                        : const Color(0xff000000),
+                    ),
+                    color: _oscillatorParams3.color, 
+                  ),
+                ]
               ),
               children: [
-                SliderTile(_lengthSlider3, _color3, _lengthSlider3Callback, 'Length'),
-                SliderTileInt(_freqSlider3, _color3, _freqSlider3Callback, 'Freq'),
+                SliderTile(_lengthSlider3, _oscillatorParams3.color, _lengthSlider3Callback, 'Length'),
+                SliderTileInt(_freqSlider3, _oscillatorParams3.color, _freqSlider3Callback, 'Freq'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -385,7 +514,7 @@ class _MyHomePageState extends State<MyHomePage>
                         freqMax: 10,
                         freqCallback: _widthFreqSlider3Callback,
                         label: 'Width Mod',
-                        color: _color3,
+                        color: _oscillatorParams3.color,
                       ),
                       AmpFreqKnobs(
                         ampValue: _opacityAmpSlider3,
@@ -397,7 +526,7 @@ class _MyHomePageState extends State<MyHomePage>
                         freqMax: 10,
                         freqCallback: _opacityFreqSlider3Callback,
                         label: 'Opacity Mod',
-                        color: _color3,
+                        color: _oscillatorParams3.color,
                       ),
                     ]
                   ),
@@ -417,7 +546,7 @@ class _MyHomePageState extends State<MyHomePage>
                       title: Text('Preset ${position + 1}',
                         style: TextStyle(
                           fontSize: 22.0,
-                          color: _color1,
+                          color: Colors.blue,
                         ),
                       ),
                       leading: Container(
@@ -426,9 +555,9 @@ class _MyHomePageState extends State<MyHomePage>
                         child: Transform.scale(
                             scale: 0.65,
                             child: presetGaugeDisplay(
-                              _presets[position][0], _color1,
-                              _presets[position][1], _color2,
-                              _presets[position][2], _color3,
+                              _presets[position][0],
+                              _presets[position][1],
+                              _presets[position][2],
                               _angleAnimation.value,
                             )),
                       ),
@@ -458,6 +587,10 @@ class _MyHomePageState extends State<MyHomePage>
                           _opacityFreqSlider2 = _presets[position][1].opacityFreq;
                           _opacityFreqSlider3 = _presets[position][2].opacityFreq;
 
+                          _color1 = _presets[position][0].color;
+                          _color2 = _presets[position][1].color;
+                          _color3 = _presets[position][2].color;
+
                           _oscillatorParams1.length = _presets[position][0].length;
                           _oscillatorParams2.length = _presets[position][1].length;
                           _oscillatorParams3.length = _presets[position][2].length;
@@ -477,6 +610,10 @@ class _MyHomePageState extends State<MyHomePage>
                           _oscillatorParams1.opacityFreq = _presets[position][0].opacityFreq;
                           _oscillatorParams2.opacityFreq = _presets[position][1].opacityFreq;
                           _oscillatorParams3.opacityFreq = _presets[position][2].opacityFreq;
+
+                          _oscillatorParams1.color = _presets[position][0].color;
+                          _oscillatorParams2.color = _presets[position][1].color;
+                          _oscillatorParams3.color = _presets[position][2].color;
                         });
                       },
                       trailing: IconButton(
