@@ -710,16 +710,66 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
     super.dispose();
   }
 
+  double lerp(double a, double b, double blendValue){
+    if (a == null && b == null)
+      return null;
+    a ??= 0.0;
+    b ??= 0.0;
+    return a + (b - a) * blendValue;
+  }
+  int lerpInt(int a, int b, double blendValue){
+    if (a == null && b == null)
+      return null;
+    a ??= 0;
+    b ??= 0;
+    return (a + (b - a) * blendValue).round();
+  }
+  OscillatorParams lerpOscillatorParams(
+    OscillatorParams params1,
+    OscillatorParams params2,
+    double blendValue){
+      OscillatorParams blendedParams =  OscillatorParams(
+        length: lerp(params1.length, params2.length, blendValue),
+        freq: lerpInt(params1.freq, params2.freq, blendValue),
+        widthAmp: lerp(params1.widthAmp, params2.widthAmp, blendValue),
+        widthFreq: lerpInt(params1.widthFreq, params2.widthFreq, blendValue),
+        opacityAmp: lerp(params1.opacityAmp, params2.opacityAmp, blendValue),
+        opacityFreq: lerpInt(params1.opacityFreq, params2.opacityFreq, blendValue),
+        color: Color.lerp(params1.color, params2.color, blendValue)
+      );
+      print(blendedParams);
+      return blendedParams;
+  }
+  double length;
+  int freq;
+  double widthAmp;
+  int widthFreq;
+  double opacityAmp;
+  int opacityFreq;
+  Color color;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Preset Blended"),
+        title: Text("Preset Blender"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            Container(
+              // padding: EdgeInsets.only(bottom: 40),
+              child: Transform.scale(
+                scale: 2.5,
+                child: presetGaugeDisplay(
+                  lerpOscillatorParams(widget.presets[0][0], widget.presets[1][0], _blendSliderValue), 
+                  lerpOscillatorParams(widget.presets[0][1], widget.presets[1][1], _blendSliderValue),
+                  lerpOscillatorParams(widget.presets[0][2], widget.presets[1][2], _blendSliderValue),
+                  _angleAnimation.value,
+                ),
+              ),
+            ),
             Row(
               children: <Widget>[
                 Transform.scale(
@@ -752,18 +802,6 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
                   ),
                 ),
               ],
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 40),
-              child: Transform.scale(
-                scale: 2.5,
-                child: presetGaugeDisplay(
-                  widget.presets[0][0], 
-                  widget.presets[0][1],
-                  widget.presets[0][2],
-                  _angleAnimation.value,
-                ),
-              ),
             ),
             RaisedButton(
               onPressed: () {
