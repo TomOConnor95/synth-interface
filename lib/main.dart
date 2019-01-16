@@ -217,14 +217,18 @@ class _MyHomePageState extends State<MyHomePage>
     var preset = [_params1, _params2, _params3];
 
     setState(() => _presets.add(preset));
+
+    enablePresetBlendingIfNecessary();
   }
 
-  Widget get savePresetButton {
-    return RaisedButton(
-      onPressed: _savePreset,
-      child: Text('Save Preset'),
-      color: Colors.lightBlueAccent,
-    );
+  bool _isBlendPresetButtonDisabled = true;
+
+  void enablePresetBlendingIfNecessary(){
+    if (_presets.length >= 2){
+      _isBlendPresetButtonDisabled = false;
+    } else {
+      _isBlendPresetButtonDisabled = true;
+    }
   }
 
   Animation<double> _angleAnimation;
@@ -272,27 +276,49 @@ class _MyHomePageState extends State<MyHomePage>
       appBar: AppBar(
         title: Text(widget.title),
       ),
+      persistentFooterButtons: <Widget>[
+        RaisedButton(
+          onPressed: _savePreset,
+          child: Text('Save Preset',
+            style: TextStyle(color: Colors.white)
+          ),
+          color: Colors.blue,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0)
+          ),
+        ),
+        RaisedButton(
+          child: Text('Blend Presets',
+            style: TextStyle(color: Colors.white)
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0)
+          ),
+          onPressed: _isBlendPresetButtonDisabled ? null : () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PresetBlenderPage(_presets)),
+            );
+          },
+        ),
+      ],
       body: Center(
         child: ListView(
           children: <Widget>[
             Container(
-                padding: EdgeInsets.only(top: 15),
-                height: 170,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                height: 190,
                 width: 200,
                 child: Transform.scale(
-                    scale: 2,
-                    child: presetGaugeDisplay(
-                      _oscillatorParams1,
-                      _oscillatorParams2,
-                      _oscillatorParams3,
-                      _angleAnimation.value,
-                    ))),
-            
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: savePresetButton,
+                scale: 2,
+                child: presetGaugeDisplay(
+                  _oscillatorParams1,
+                  _oscillatorParams2,
+                  _oscillatorParams3,
+                  _angleAnimation.value,
+                )
+              )
             ),
-
             ExpansionTile(
               title: Row(
                 children: <Widget> [
@@ -534,7 +560,7 @@ class _MyHomePageState extends State<MyHomePage>
               ]
             ),
             SizedBox(
-              height: 500,
+              height: _presets.length * 70.0,
               child: ListView.builder(
               itemCount: _presets.length,
               padding: const EdgeInsets.all(3.0),
@@ -622,6 +648,7 @@ class _MyHomePageState extends State<MyHomePage>
                           setState(() {
                             _presets.removeAt(position);
                           });
+                          enablePresetBlendingIfNecessary();
                         },
                       ),
                     ),
@@ -635,3 +662,119 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 }
+
+
+class PresetBlenderPage extends StatefulWidget {
+  PresetBlenderPage(this.presets);
+
+  final List<List<OscillatorParams>> presets;
+
+  @override
+  _PresetBlenderPageState createState() => _PresetBlenderPageState();
+}
+
+class _PresetBlenderPageState extends State<PresetBlenderPage>
+    with SingleTickerProviderStateMixin {
+
+  double _blendSliderValue = 0.5;
+
+  Animation<double> _angleAnimation;
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = new AnimationController(
+        duration: const Duration(milliseconds: 6000), vsync: this);
+    _angleAnimation = new Tween(begin: 0.0, end: 360.0).animate(_controller)
+      ..addListener(() {
+        setState(() {
+          // the state that has changed here is the animation object’s value
+        });
+      });
+
+    _angleAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reset();
+      } else if (status == AnimationStatus.dismissed) {
+        _controller.forward();
+      }
+    });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Preset Blended"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Transform.scale(
+                  scale: 0.8,
+                  child: presetGaugeDisplay(
+                    widget.presets[0][0], 
+                    widget.presets[0][1],
+                    widget.presets[0][2],
+                    _angleAnimation.value,
+                  ),
+                ),
+                Expanded(
+                  child: Slider(
+                    value: _blendSliderValue,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _blendSliderValue = newValue;             
+                      });
+                    },
+                    
+                  ),
+                ),
+                Transform.scale(
+                  scale: 0.8,
+                  child: presetGaugeDisplay(
+                    widget.presets[1][0], 
+                    widget.presets[1][1],
+                    widget.presets[1][2],
+                    _angleAnimation.value,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.only(bottom: 40),
+              child: Transform.scale(
+                scale: 2.5,
+                child: presetGaugeDisplay(
+                  widget.presets[0][0], 
+                  widget.presets[0][1],
+                  widget.presets[0][2],
+                  _angleAnimation.value,
+                ),
+              ),
+            ),
+            RaisedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Go back!'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+    
