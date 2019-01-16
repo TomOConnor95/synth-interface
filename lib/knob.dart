@@ -2,13 +2,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class Knob extends StatefulWidget {
-  double value;
-  double min;
-  double max;
+  final double value;
+  final double min;
+  final double max;
 
-  double size;
+  final double size;
 
-  Color color;
+  final Color color;
 
   final ValueChanged<double> onChanged;
 
@@ -63,12 +63,12 @@ class KnobState extends State<Knob> {
 }
 
 class KnobInt extends StatefulWidget {
-  int value;
-  int min;
-  int max;
+  final int value;
+  final int min;
+  final int max;
 
-  double size;
-  Color color;
+  final double size;
+  final Color color;
 
   final ValueChanged<int> onChanged;
 

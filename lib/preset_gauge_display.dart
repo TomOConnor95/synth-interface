@@ -15,7 +15,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, OscillatorParams o
 
     return Stack(
       children: <Widget>[
-        OscillatorAnimation(
+        oscillatorAnimation(
           oscillatorParams1.length*100,
           oscillatorParams1.freq,
           oscillatorParams1.widthAmp,
@@ -28,7 +28,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, OscillatorParams o
           angleInRadians,
           size,
         ),
-        OscillatorAnimation(
+        oscillatorAnimation(
           oscillatorParams2.length*100,
           oscillatorParams2.freq,
           oscillatorParams2.widthAmp,
@@ -41,7 +41,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, OscillatorParams o
           angleInRadians,
           size,
         ),
-        OscillatorAnimation(
+        oscillatorAnimation(
           oscillatorParams3.length*100,
           oscillatorParams3.freq,
           oscillatorParams3.widthAmp,
@@ -58,7 +58,7 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, OscillatorParams o
     );
   }
 
-  Widget OscillatorAnimation(
+  Widget oscillatorAnimation(
     double length,
     int freq,
     double widthAmp,

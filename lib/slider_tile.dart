@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import './parameter_value_display.dart';
 class SliderTile extends StatefulWidget {
 
-  double sliderValue; 
-  Color color;
-  Function(num) callback;
-  String label;
+  final double sliderValue; 
+  final Color color;
+  final Function(num) callback;
+  final String label;
 
   SliderTile(this.sliderValue, this.color, this.callback, this.label);
 
@@ -40,10 +40,10 @@ class _SliderTileState extends State<SliderTile>{
 
 class SliderTileInt extends StatefulWidget {
 
-  int sliderValue; 
-  Color color;
-  Function(num) callback;
-  String label;
+  final int sliderValue; 
+  final Color color;
+  final Function(num) callback;
+  final String label;
 
   SliderTileInt(this.sliderValue, this.color, this.callback, this.label);
 

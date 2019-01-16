@@ -4,13 +4,13 @@ import './knob.dart';
 
 class KnobTile extends StatefulWidget {
 
-  double value; 
-  double min;
-  double max;
+  final double value; 
+  final double min;
+  final double max;
 
-  Color color;
-  Function(double) callback;
-  String label;
+  final Color color;
+  final Function(double) callback;
+  final String label;
 
   KnobTile({this.value, this.min, this.max, this.color, this.callback, this.label});
 
@@ -51,13 +51,13 @@ class _KnobTileState extends State<KnobTile>{
 
 class KnobTileInt extends StatefulWidget {
 
-  int value; 
-  int min;
-  int max;
+  final int value; 
+  final int min;
+  final int max;
 
-  Color color;
-  Function(int) callback;
-  String label;
+  final Color color;
+  final Function(int) callback;
+  final String label;
 
   KnobTileInt({this.value, this.min, this.max, this.color, this.callback, this.label});
 
