@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class OscillatorParams {
   double length;
@@ -50,4 +51,22 @@ int lerpInt(int a, int b, double blendValue){
   a ??= 0;
   b ??= 0;
   return (a + (b - a) * blendValue).round();
+}
+
+OscillatorParams randomOscillatorParams(){
+  var randomGenerator = Random();
+  return OscillatorParams(
+    length: randomGenerator.nextDouble(),
+    freq: randomGenerator.nextInt(11),
+    widthAmp: randomGenerator.nextDouble(),
+    widthFreq: randomGenerator.nextInt(11),
+    opacityAmp: randomGenerator.nextDouble(),
+    opacityFreq: randomGenerator.nextInt(11),
+    color: Color.fromRGBO(
+      randomGenerator.nextInt(256),
+      randomGenerator.nextInt(256),
+      randomGenerator.nextInt(256),
+      1.0,
+    ),
+  );
 }
