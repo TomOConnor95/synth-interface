@@ -3,10 +3,9 @@ import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 import './slider_tile.dart';
 import './amp_freq_knobs.dart';
+import './color_picker_button.dart';
 
 import 'dart:math';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_colorpicker/utils.dart';
 
 void main() => runApp(MyApp());
 
@@ -446,46 +445,15 @@ class _MyHomePageState extends State<MyHomePage>
                     fontSize: 22,
                     ),
                   ),
-                  RaisedButton(
-                    shape: CircleBorder(),
-                    elevation: 3.0,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            titlePadding: const EdgeInsets.all(0.0),
-                            contentPadding: const EdgeInsets.all(0.0),
-                            content: SingleChildScrollView(
-                              child: ColorPicker(
-                                pickerColor: _oscillatorParams1.color,
-                                onColorChanged: changeColor1,
-                                colorPickerWidth: 1000.0,
-                                pickerAreaHeightPercent: 0.7,
-                                enableAlpha: false,
-                                enableLabel: false,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Icon(Icons.color_lens,
-                      color: useWhiteForeground(_oscillatorParams1.color)
-                        ? const Color(0xffffffff)
-                        : const Color(0xff000000),
-                    ),
-                    color: _oscillatorParams1.color, 
-                  ),
-                  RaisedButton(
-                    onPressed: () => _randomiseParameters(oscillatorNum: 1),
-                    child: Icon(Icons.shuffle,
-                      color: useWhiteForeground(_oscillatorParams1.color)
-                        ? const Color(0xffffffff)
-                        : const Color(0xff000000)
-                    ),
+                  ColorPickerButton(
                     color: _oscillatorParams1.color,
-                    shape: CircleBorder(),
+                    onColorChanged: changeColor1,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.shuffle, size: 33),
+                    color: _oscillatorParams1.color,
+                    padding: EdgeInsets.all(0.0),
+                    onPressed: () => _randomiseParameters(oscillatorNum: 1),
                   ),
                 ]
               ),
@@ -536,46 +504,15 @@ class _MyHomePageState extends State<MyHomePage>
                     fontSize: 22,
                     ),
                   ),
-                  RaisedButton(
-                    shape: CircleBorder(),
-                    elevation: 3.0,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            titlePadding: const EdgeInsets.all(0.0),
-                            contentPadding: const EdgeInsets.all(0.0),
-                            content: SingleChildScrollView(
-                              child: ColorPicker(
-                                pickerColor: _oscillatorParams2.color,
-                                onColorChanged: changeColor2,
-                                colorPickerWidth: 1000.0,
-                                pickerAreaHeightPercent: 0.7,
-                                enableAlpha: false,
-                                enableLabel: false,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Icon(Icons.color_lens,
-                      color: useWhiteForeground(_oscillatorParams2.color)
-                        ? const Color(0xffffffff)
-                        : const Color(0xff000000),
-                    ),
-                    color: _oscillatorParams2.color, 
-                  ),
-                  RaisedButton(
-                    onPressed: () => _randomiseParameters(oscillatorNum: 2),
-                    child: Icon(Icons.shuffle,
-                      color: useWhiteForeground(_oscillatorParams2.color)
-                        ? const Color(0xffffffff)
-                        : const Color(0xff000000)
-                    ),
+                  ColorPickerButton(
                     color: _oscillatorParams2.color,
-                    shape: CircleBorder(),
+                    onColorChanged: changeColor2,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.shuffle, size: 33),
+                    color: _oscillatorParams2.color,
+                    padding: EdgeInsets.all(0.0),
+                    onPressed: () => _randomiseParameters(oscillatorNum: 2),
                   ),
                 ]
               ),
@@ -626,46 +563,15 @@ class _MyHomePageState extends State<MyHomePage>
                     fontSize: 22,
                     ),
                   ),
-                  RaisedButton(
-                    shape: CircleBorder(),
-                    elevation: 3.0,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            titlePadding: const EdgeInsets.all(0.0),
-                            contentPadding: const EdgeInsets.all(0.0),
-                            content: SingleChildScrollView(
-                              child: ColorPicker(
-                                pickerColor: _oscillatorParams3.color,
-                                onColorChanged: changeColor3,
-                                colorPickerWidth: 1000.0,
-                                pickerAreaHeightPercent: 0.7,
-                                enableAlpha: false,
-                                enableLabel: false,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Icon(Icons.color_lens,
-                      color: useWhiteForeground(_oscillatorParams3.color)
-                        ? const Color(0xffffffff)
-                        : const Color(0xff000000),
-                    ),
-                    color: _oscillatorParams3.color, 
-                  ),
-                  RaisedButton(
-                    onPressed: () => _randomiseParameters(oscillatorNum: 3),
-                    child: Icon(Icons.shuffle,
-                      color: useWhiteForeground(_oscillatorParams3.color)
-                        ? const Color(0xffffffff)
-                        : const Color(0xff000000)
-                    ),
+                  ColorPickerButton(
                     color: _oscillatorParams3.color,
-                    shape: CircleBorder(),
+                    onColorChanged: changeColor3,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.shuffle, size: 33),
+                    color: _oscillatorParams3.color,
+                    padding: EdgeInsets.all(0.0),
+                    onPressed: () => _randomiseParameters(oscillatorNum: 3),
                   ),
                 ]
               ),
@@ -857,36 +763,7 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
     super.dispose();
   }
 
-  double lerp(double a, double b, double blendValue){
-    if (a == null && b == null)
-      return null;
-    a ??= 0.0;
-    b ??= 0.0;
-    return a + (b - a) * blendValue;
-  }
-  int lerpInt(int a, int b, double blendValue){
-    if (a == null && b == null)
-      return null;
-    a ??= 0;
-    b ??= 0;
-    return (a + (b - a) * blendValue).round();
-  }
-  OscillatorParams lerpOscillatorParams(
-    OscillatorParams params1,
-    OscillatorParams params2,
-    double blendValue){
-      OscillatorParams blendedParams =  OscillatorParams(
-        length: lerp(params1.length, params2.length, blendValue),
-        freq: lerpInt(params1.freq, params2.freq, blendValue),
-        widthAmp: lerp(params1.widthAmp, params2.widthAmp, blendValue),
-        widthFreq: lerpInt(params1.widthFreq, params2.widthFreq, blendValue),
-        opacityAmp: lerp(params1.opacityAmp, params2.opacityAmp, blendValue),
-        opacityFreq: lerpInt(params1.opacityFreq, params2.opacityFreq, blendValue),
-        color: Color.lerp(params1.color, params2.color, blendValue)
-      );
-      print(blendedParams);
-      return blendedParams;
-  }
+  
   double length;
   int freq;
   double widthAmp;
