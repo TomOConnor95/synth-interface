@@ -35,29 +35,29 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
 
-  double _lengthSlider1 = 0.3;
-  double _lengthSlider2 = 0.7;
-  double _lengthSlider3 = 0.8;
+  double _lengthSlider1;
+  double _lengthSlider2;
+  double _lengthSlider3;
 
-  int _freqSlider1 = 2;
-  int _freqSlider2 = 3;
-  int _freqSlider3 = 4;
+  int _freqSlider1;
+  int _freqSlider2;
+  int _freqSlider3;
 
-  double _widthAmpSlider1 = 0.7;
-  double _widthAmpSlider2 = 0.6;
-  double _widthAmpSlider3 = 0.1;
+  double _widthAmpSlider1;
+  double _widthAmpSlider2;
+  double _widthAmpSlider3;
 
-  int _widthFreqSlider1 = 2;
-  int _widthFreqSlider2 = 3;
-  int _widthFreqSlider3 = 4;
+  int _widthFreqSlider1;
+  int _widthFreqSlider2;
+  int _widthFreqSlider3;
 
-  double _opacityAmpSlider1 = 0.1;
-  double _opacityAmpSlider2 = 0.2;
-  double _opacityAmpSlider3 = 0.2;
+  double _opacityAmpSlider1;
+  double _opacityAmpSlider2;
+  double _opacityAmpSlider3;
 
-  int _opacityFreqSlider1 = 3;
-  int _opacityFreqSlider2 = 4;
-  int _opacityFreqSlider3 = 5;
+  int _opacityFreqSlider1;
+  int _opacityFreqSlider2;
+  int _opacityFreqSlider3;
   
   _lengthSlider1Callback(newValue) {
     setState(() => _lengthSlider1 = newValue);
@@ -166,9 +166,9 @@ class _MyHomePageState extends State<MyHomePage>
     color: Colors.green,
   );
 
-  Color _color1 = Colors.indigoAccent;
-  Color _color2 = Colors.red;
-  Color _color3 = Colors.green;
+  Color _color1;
+  Color _color2;
+  Color _color3;
 
   ValueChanged<Color> onColorChanged;
   changeColor1(Color color) {
@@ -240,6 +240,49 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
   
+  void updateOscillatorInputElements1(OscillatorParams params){
+    setState(() {
+      _lengthSlider1 = params.length;
+      _freqSlider1 = params.freq;
+      _widthAmpSlider1 = params.widthAmp;
+      _widthFreqSlider1 = params.widthFreq;
+      _opacityAmpSlider1 = params.opacityAmp;
+      _opacityFreqSlider1 = params.opacityFreq;
+      _color1 = params.color;
+    });
+  }
+  void updateOscillatorInputElements2(OscillatorParams params){
+    setState(() {
+      _lengthSlider2 = params.length;
+      _freqSlider2 = params.freq;
+      _widthAmpSlider2 = params.widthAmp;
+      _widthFreqSlider2 = params.widthFreq;
+      _opacityAmpSlider2 = params.opacityAmp;
+      _opacityFreqSlider2 = params.opacityFreq;
+      _color2 = params.color;
+    });
+  }
+  void updateOscillatorInputElements3(OscillatorParams params){
+    setState(() {
+      _lengthSlider3 = params.length;
+      _freqSlider3 = params.freq;
+      _widthAmpSlider3 = params.widthAmp;
+      _widthFreqSlider3 = params.widthFreq;
+      _opacityAmpSlider3 = params.opacityAmp;
+      _opacityFreqSlider3 = params.opacityFreq;
+      _color3 = params.color;
+    });
+  }
+  void updateAllInputElements(
+    OscillatorParams params1,
+    OscillatorParams params2,
+    OscillatorParams params3,
+    ){
+    updateOscillatorInputElements1(params1);
+    updateOscillatorInputElements2(params2);
+    updateOscillatorInputElements3(params3);
+  }
+
   void _randomiseParameters({int oscillatorNum}) {
     OscillatorParams _params1;
     OscillatorParams _params2;
@@ -250,43 +293,19 @@ class _MyHomePageState extends State<MyHomePage>
       setState(() {
         _oscillatorParams1 = _params1;
       });
-      setState(() {
-        _lengthSlider1 = _params1.length;
-        _freqSlider1 = _params1.freq;
-        _widthAmpSlider1 = _params1.widthAmp;
-        _widthFreqSlider1 = _params1.widthFreq;
-        _opacityAmpSlider1 = _params1.opacityAmp;
-        _opacityFreqSlider1 = _params1.opacityFreq;
-        _color1 = _params1.color;
-      });
+      updateOscillatorInputElements1(_params1);
     } else if (oscillatorNum == 2) {
       _params2 = randomOscillatorParams();
       setState(() {
         _oscillatorParams2 = _params2;
       });
-      setState(() {
-        _lengthSlider2 = _params2.length;
-        _freqSlider2 = _params2.freq;
-        _widthAmpSlider2 = _params2.widthAmp;
-        _widthFreqSlider2 = _params2.widthFreq;
-        _opacityAmpSlider2 = _params2.opacityAmp;
-        _opacityFreqSlider2 = _params2.opacityFreq;
-        _color2 = _params2.color;
-      });
+      updateOscillatorInputElements2(_params2);
     } else if (oscillatorNum == 3) {
       _params3 = randomOscillatorParams();
       setState(() {
         _oscillatorParams3 = _params3;
       });
-      setState(() {
-        _lengthSlider3 = _params3.length;
-        _freqSlider3 = _params3.freq;
-        _widthAmpSlider3 = _params3.widthAmp;
-        _widthFreqSlider3 = _params3.widthFreq;
-        _opacityAmpSlider3 = _params3.opacityAmp;
-        _opacityFreqSlider3 = _params3.opacityFreq;
-        _color3 = _params3.color;
-      });
+      updateOscillatorInputElements3(_params3);
     } else {
       _params1 = randomOscillatorParams();
       _params2 = randomOscillatorParams();
@@ -296,35 +315,11 @@ class _MyHomePageState extends State<MyHomePage>
         _oscillatorParams2 = _params2;
         _oscillatorParams3 = _params3;
       });
-      setState(() {
-        _lengthSlider1 = _params1.length;
-        _lengthSlider2 = _params2.length;
-        _lengthSlider3 = _params3.length;
-
-        _freqSlider1 = _params1.freq;
-        _freqSlider2 = _params2.freq;
-        _freqSlider3 = _params3.freq;
-
-        _widthAmpSlider1 = _params1.widthAmp;
-        _widthAmpSlider2 = _params2.widthAmp;
-        _widthAmpSlider3 = _params3.widthAmp;
-
-        _widthFreqSlider1 = _params1.widthFreq;
-        _widthFreqSlider2 = _params2.widthFreq;
-        _widthFreqSlider3 = _params3.widthFreq;
-
-        _opacityAmpSlider1 = _params1.opacityAmp;
-        _opacityAmpSlider2 = _params2.opacityAmp;
-        _opacityAmpSlider3 = _params3.opacityAmp;
-
-        _opacityFreqSlider1 = _params1.opacityFreq;
-        _opacityFreqSlider2 = _params2.opacityFreq;
-        _opacityFreqSlider3 = _params3.opacityFreq;
-
-        _color1 = _params1.color;
-        _color2 = _params2.color;
-        _color3 = _params3.color;
-      });
+      updateAllInputElements(
+        _params1,
+        _params2,
+        _params3,
+      );
     }
   }
 
@@ -344,7 +339,13 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
-
+    
+    updateAllInputElements(
+      _oscillatorParams1,
+      _oscillatorParams2,
+      _oscillatorParams3,
+    );
+    
     _controller = new AnimationController(
         duration: const Duration(milliseconds: 6000), vsync: this);
     _angleAnimation = new Tween(begin: 0.0, end: 360.0).animate(_controller)
