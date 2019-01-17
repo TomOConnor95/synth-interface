@@ -3,7 +3,7 @@ import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 import './slider_tile.dart';
 import './amp_freq_knobs.dart';
-import './color_picker_button.dart';
+import './oscillator_title_row.dart';
 
 import 'dart:math';
 
@@ -239,7 +239,8 @@ class _MyHomePageState extends State<MyHomePage>
       ),
     );
   }
-  void _randomiseParameters({oscillatorNum}) {
+  
+  void _randomiseParameters({int oscillatorNum}) {
     OscillatorParams _params1;
     OscillatorParams _params2;
     OscillatorParams _params3;
@@ -436,26 +437,12 @@ class _MyHomePageState extends State<MyHomePage>
               )
             ),
             ExpansionTile(
-              title: Row(
-                children: <Widget> [
-                  Text(
-                    'Oscillator 1',
-                    style: TextStyle(
-                    color: _oscillatorParams1.color,
-                    fontSize: 22,
-                    ),
-                  ),
-                  ColorPickerButton(
-                    color: _oscillatorParams1.color,
-                    onColorChanged: changeColor1,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.shuffle, size: 33),
-                    color: _oscillatorParams1.color,
-                    padding: EdgeInsets.all(0.0),
-                    onPressed: () => _randomiseParameters(oscillatorNum: 1),
-                  ),
-                ]
+              title: OscillatorTitleRow(
+                title: 'Oscillator 1',
+                color: _oscillatorParams1.color,
+                onColorChanged: changeColor1,
+                onShufflePressed: (
+                ) => _randomiseParameters(oscillatorNum: 1),
               ),
               children: [
                 SliderTile(_lengthSlider1, _oscillatorParams1.color, _lengthSlider1Callback, 'Length'),
@@ -495,26 +482,12 @@ class _MyHomePageState extends State<MyHomePage>
               ]
             ),
             ExpansionTile(
-              title: Row(
-                children: <Widget> [
-                  Text(
-                    'Oscillator 2',
-                    style: TextStyle(
-                    color: _oscillatorParams2.color,
-                    fontSize: 22,
-                    ),
-                  ),
-                  ColorPickerButton(
-                    color: _oscillatorParams2.color,
-                    onColorChanged: changeColor2,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.shuffle, size: 33),
-                    color: _oscillatorParams2.color,
-                    padding: EdgeInsets.all(0.0),
-                    onPressed: () => _randomiseParameters(oscillatorNum: 2),
-                  ),
-                ]
+              title: OscillatorTitleRow(
+                title: 'Oscillator 2',
+                color: _oscillatorParams2.color,
+                onColorChanged: changeColor2,
+                onShufflePressed: (
+                ) => _randomiseParameters(oscillatorNum: 2),
               ),
               children: [
                 SliderTile(_lengthSlider2, _oscillatorParams2.color, _lengthSlider2Callback, 'Length'),
@@ -554,26 +527,12 @@ class _MyHomePageState extends State<MyHomePage>
               ]
             ),
             ExpansionTile(
-              title: Row(
-                children: <Widget> [
-                  Text(
-                    'Oscillator 3',
-                    style: TextStyle(
-                    color: _oscillatorParams3.color,
-                    fontSize: 22,
-                    ),
-                  ),
-                  ColorPickerButton(
-                    color: _oscillatorParams3.color,
-                    onColorChanged: changeColor3,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.shuffle, size: 33),
-                    color: _oscillatorParams3.color,
-                    padding: EdgeInsets.all(0.0),
-                    onPressed: () => _randomiseParameters(oscillatorNum: 3),
-                  ),
-                ]
+              title: OscillatorTitleRow(
+                title: 'Oscillator 3',
+                color: _oscillatorParams3.color,
+                onColorChanged: changeColor3,
+                onShufflePressed: (
+                ) => _randomiseParameters(oscillatorNum: 3),
               ),
               children: [
                 SliderTile(_lengthSlider3, _oscillatorParams3.color, _lengthSlider3Callback, 'Length'),
