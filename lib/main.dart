@@ -232,55 +232,100 @@ class _MyHomePageState extends State<MyHomePage>
       widthFreq: randomGenerator.nextInt(11),
       opacityAmp: randomGenerator.nextDouble(),
       opacityFreq: randomGenerator.nextInt(11),
-      color: Color.fromARGB(
-        //or with fromRGBO with fourth arg as _random.nextDouble(),
+      color: Color.fromRGBO(
         randomGenerator.nextInt(256),
         randomGenerator.nextInt(256),
         randomGenerator.nextInt(256),
-        randomGenerator.nextInt(256),
+        1.0,
       ),
     );
   }
-  void _randomiseParameters() {
-    var _params1 = randomOscillatorParams();
-    var _params2 = randomOscillatorParams();
-    var _params3 = randomOscillatorParams();
-    // var preset = [_params1, _params2, _params3];
+  void _randomiseParameters({oscillatorNum}) {
+    OscillatorParams _params1;
+    OscillatorParams _params2;
+    OscillatorParams _params3;
+    
+    if (oscillatorNum == 1) {
+      _params1 = randomOscillatorParams();
+      setState(() {
+        _oscillatorParams1 = _params1;
+      });
+      setState(() {
+        _lengthSlider1 = _params1.length;
+        _freqSlider1 = _params1.freq;
+        _widthAmpSlider1 = _params1.widthAmp;
+        _widthFreqSlider1 = _params1.widthFreq;
+        _opacityAmpSlider1 = _params1.opacityAmp;
+        _opacityFreqSlider1 = _params1.opacityFreq;
+        _color1 = _params1.color;
+      });
+    } else if (oscillatorNum == 2) {
+      _params2 = randomOscillatorParams();
+      setState(() {
+        _oscillatorParams2 = _params2;
+      });
+      setState(() {
+        _lengthSlider2 = _params2.length;
+        _freqSlider2 = _params2.freq;
+        _widthAmpSlider2 = _params2.widthAmp;
+        _widthFreqSlider2 = _params2.widthFreq;
+        _opacityAmpSlider2 = _params2.opacityAmp;
+        _opacityFreqSlider2 = _params2.opacityFreq;
+        _color2 = _params2.color;
+      });
+    } else if (oscillatorNum == 3) {
+      _params3 = randomOscillatorParams();
+      setState(() {
+        _oscillatorParams3 = _params3;
+      });
+      setState(() {
+        _lengthSlider3 = _params3.length;
+        _freqSlider3 = _params3.freq;
+        _widthAmpSlider3 = _params3.widthAmp;
+        _widthFreqSlider3 = _params3.widthFreq;
+        _opacityAmpSlider3 = _params3.opacityAmp;
+        _opacityFreqSlider3 = _params3.opacityFreq;
+        _color3 = _params3.color;
+      });
+    } else {
+      _params1 = randomOscillatorParams();
+      _params2 = randomOscillatorParams();
+      _params3 = randomOscillatorParams();
+      setState(() {
+        _oscillatorParams1 = _params1;
+        _oscillatorParams2 = _params2;
+        _oscillatorParams3 = _params3;
+      });
+      setState(() {
+        _lengthSlider1 = _params1.length;
+        _lengthSlider2 = _params2.length;
+        _lengthSlider3 = _params3.length;
 
-    setState(() {
-      _oscillatorParams1 = _params1;
-      _oscillatorParams2 = _params2;
-      _oscillatorParams3 = _params3;
-    });
-    setState(() {
-      _lengthSlider1 = _params1.length;
-      _lengthSlider2 = _params2.length;
-      _lengthSlider3 = _params3.length;
+        _freqSlider1 = _params1.freq;
+        _freqSlider2 = _params2.freq;
+        _freqSlider3 = _params3.freq;
 
-      _freqSlider1 = _params1.freq;
-      _freqSlider2 = _params2.freq;
-      _freqSlider3 = _params3.freq;
+        _widthAmpSlider1 = _params1.widthAmp;
+        _widthAmpSlider2 = _params2.widthAmp;
+        _widthAmpSlider3 = _params3.widthAmp;
 
-      _widthAmpSlider1 = _params1.widthAmp;
-      _widthAmpSlider2 = _params2.widthAmp;
-      _widthAmpSlider3 = _params3.widthAmp;
+        _widthFreqSlider1 = _params1.widthFreq;
+        _widthFreqSlider2 = _params2.widthFreq;
+        _widthFreqSlider3 = _params3.widthFreq;
 
-      _widthFreqSlider1 = _params1.widthFreq;
-      _widthFreqSlider2 = _params2.widthFreq;
-      _widthFreqSlider3 = _params3.widthFreq;
+        _opacityAmpSlider1 = _params1.opacityAmp;
+        _opacityAmpSlider2 = _params2.opacityAmp;
+        _opacityAmpSlider3 = _params3.opacityAmp;
 
-      _opacityAmpSlider1 = _params1.opacityAmp;
-      _opacityAmpSlider2 = _params2.opacityAmp;
-      _opacityAmpSlider3 = _params3.opacityAmp;
+        _opacityFreqSlider1 = _params1.opacityFreq;
+        _opacityFreqSlider2 = _params2.opacityFreq;
+        _opacityFreqSlider3 = _params3.opacityFreq;
 
-      _opacityFreqSlider1 = _params1.opacityFreq;
-      _opacityFreqSlider2 = _params2.opacityFreq;
-      _opacityFreqSlider3 = _params3.opacityFreq;
-
-      _color1 = _params1.color;
-      _color2 = _params2.color;
-      _color3 = _params3.color;
-    });
+        _color1 = _params1.color;
+        _color2 = _params2.color;
+        _color3 = _params3.color;
+      });
+    }
   }
 
   bool _isBlendPresetButtonDisabled = true;
@@ -432,6 +477,16 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                     color: _oscillatorParams1.color, 
                   ),
+                  RaisedButton(
+                    onPressed: () => _randomiseParameters(oscillatorNum: 1),
+                    child: Icon(Icons.shuffle,
+                      color: useWhiteForeground(_oscillatorParams1.color)
+                        ? const Color(0xffffffff)
+                        : const Color(0xff000000)
+                    ),
+                    color: _oscillatorParams1.color,
+                    shape: CircleBorder(),
+                  ),
                 ]
               ),
               children: [
@@ -512,6 +567,16 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                     color: _oscillatorParams2.color, 
                   ),
+                  RaisedButton(
+                    onPressed: () => _randomiseParameters(oscillatorNum: 2),
+                    child: Icon(Icons.shuffle,
+                      color: useWhiteForeground(_oscillatorParams2.color)
+                        ? const Color(0xffffffff)
+                        : const Color(0xff000000)
+                    ),
+                    color: _oscillatorParams2.color,
+                    shape: CircleBorder(),
+                  ),
                 ]
               ),
               children: [
@@ -591,6 +656,16 @@ class _MyHomePageState extends State<MyHomePage>
                         : const Color(0xff000000),
                     ),
                     color: _oscillatorParams3.color, 
+                  ),
+                  RaisedButton(
+                    onPressed: () => _randomiseParameters(oscillatorNum: 3),
+                    child: Icon(Icons.shuffle,
+                      color: useWhiteForeground(_oscillatorParams3.color)
+                        ? const Color(0xffffffff)
+                        : const Color(0xff000000)
+                    ),
+                    color: _oscillatorParams3.color,
+                    shape: CircleBorder(),
                   ),
                 ]
               ),
