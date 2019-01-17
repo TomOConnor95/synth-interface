@@ -4,6 +4,7 @@ import './oscillator_params.dart';
 import './slider_tile.dart';
 import './amp_freq_knobs.dart';
 
+import 'dart:math';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_colorpicker/utils.dart';
 
@@ -221,6 +222,67 @@ class _MyHomePageState extends State<MyHomePage>
     enablePresetBlendingIfNecessary();
   }
 
+  
+  OscillatorParams randomOscillatorParams(){
+    var randomGenerator = Random();
+    return OscillatorParams(
+      length: randomGenerator.nextDouble(),
+      freq: randomGenerator.nextInt(11),
+      widthAmp: randomGenerator.nextDouble(),
+      widthFreq: randomGenerator.nextInt(11),
+      opacityAmp: randomGenerator.nextDouble(),
+      opacityFreq: randomGenerator.nextInt(11),
+      color: Color.fromARGB(
+        //or with fromRGBO with fourth arg as _random.nextDouble(),
+        randomGenerator.nextInt(256),
+        randomGenerator.nextInt(256),
+        randomGenerator.nextInt(256),
+        randomGenerator.nextInt(256),
+      ),
+    );
+  }
+  void _randomiseParameters() {
+    var _params1 = randomOscillatorParams();
+    var _params2 = randomOscillatorParams();
+    var _params3 = randomOscillatorParams();
+    // var preset = [_params1, _params2, _params3];
+
+    setState(() {
+      _oscillatorParams1 = _params1;
+      _oscillatorParams2 = _params2;
+      _oscillatorParams3 = _params3;
+    });
+    setState(() {
+      _lengthSlider1 = _params1.length;
+      _lengthSlider2 = _params2.length;
+      _lengthSlider3 = _params3.length;
+
+      _freqSlider1 = _params1.freq;
+      _freqSlider2 = _params2.freq;
+      _freqSlider3 = _params3.freq;
+
+      _widthAmpSlider1 = _params1.widthAmp;
+      _widthAmpSlider2 = _params2.widthAmp;
+      _widthAmpSlider3 = _params3.widthAmp;
+
+      _widthFreqSlider1 = _params1.widthFreq;
+      _widthFreqSlider2 = _params2.widthFreq;
+      _widthFreqSlider3 = _params3.widthFreq;
+
+      _opacityAmpSlider1 = _params1.opacityAmp;
+      _opacityAmpSlider2 = _params2.opacityAmp;
+      _opacityAmpSlider3 = _params3.opacityAmp;
+
+      _opacityFreqSlider1 = _params1.opacityFreq;
+      _opacityFreqSlider2 = _params2.opacityFreq;
+      _opacityFreqSlider3 = _params3.opacityFreq;
+
+      _color1 = _params1.color;
+      _color2 = _params2.color;
+      _color3 = _params3.color;
+    });
+  }
+
   bool _isBlendPresetButtonDisabled = true;
 
   void enablePresetBlendingIfNecessary(){
@@ -277,6 +339,16 @@ class _MyHomePageState extends State<MyHomePage>
         title: Text(widget.title),
       ),
       persistentFooterButtons: <Widget>[
+        RaisedButton(
+          onPressed: _randomiseParameters,
+          child: Text('Randomise',
+            style: TextStyle(color: Colors.white)
+          ),
+          color: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+          ),
+        ),
         RaisedButton(
           onPressed: _savePreset,
           child: Text('Save Preset',
