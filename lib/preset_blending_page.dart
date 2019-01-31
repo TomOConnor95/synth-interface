@@ -48,6 +48,8 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
     super.dispose();
   }
 
+  int presetSelectedLeft = 0;
+  int presetSelectedRight = 1;
   
   double length;
   int freq;
@@ -72,22 +74,42 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
               child: Transform.scale(
                 scale: 2.5,
                 child: presetGaugeDisplay(
-                  lerpOscillatorParams(widget.presets[0][0], widget.presets[1][0], _blendSliderValue), 
-                  lerpOscillatorParams(widget.presets[0][1], widget.presets[1][1], _blendSliderValue),
-                  lerpOscillatorParams(widget.presets[0][2], widget.presets[1][2], _blendSliderValue),
+                  lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue), 
+                  lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
+                  lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
                   _angleAnimation.value,
                 ),
               ),
             ),
             Row(
               children: <Widget>[
-                Transform.scale(
-                  scale: 0.8,
-                  child: presetGaugeDisplay(
-                    widget.presets[0][0], 
-                    widget.presets[0][1],
-                    widget.presets[0][2],
-                    _angleAnimation.value,
+                ButtonTheme(
+                  alignedDropdown: true,
+                  child:DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: presetSelectedLeft,
+                      elevation: 8,
+                      items: List<DropdownMenuItem<int>>.generate(
+                        widget.presets.length,
+                        (int index) => DropdownMenuItem(
+                          value: index,
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            child: Transform.scale(
+                              scale: index == presetSelectedLeft ? 0.7 : 0.5,
+                              child: presetGaugeDisplay(
+                                widget.presets[index][0], 
+                                widget.presets[index][1],
+                                widget.presets[index][2],
+                                _angleAnimation.value,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      onChanged: (value) => setState(presetSelectedLeft = value),
+                    ),
                   ),
                 ),
                 Expanded(
@@ -98,16 +120,35 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
                         _blendSliderValue = newValue;             
                       });
                     },
-                    
                   ),
                 ),
-                Transform.scale(
-                  scale: 0.8,
-                  child: presetGaugeDisplay(
-                    widget.presets[1][0], 
-                    widget.presets[1][1],
-                    widget.presets[1][2],
-                    _angleAnimation.value,
+                ButtonTheme(
+                  alignedDropdown: true,
+                  child:DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: presetSelectedRight,
+                      elevation: 8,
+                      items: List<DropdownMenuItem<int>>.generate(
+                        widget.presets.length,
+                        (int index) => DropdownMenuItem(
+                          value: index,
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            child: Transform.scale(
+                              scale: index == presetSelectedRight ? 0.7 : 0.5,
+                              child: presetGaugeDisplay(
+                                widget.presets[index][0], 
+                                widget.presets[index][1],
+                                widget.presets[index][2],
+                                _angleAnimation.value,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      onChanged: (value) => setState(presetSelectedRight = value),
+                    ),
                   ),
                 ),
               ],
@@ -124,4 +165,3 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
     );
   }
 }
-    

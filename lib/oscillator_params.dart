@@ -34,7 +34,6 @@ OscillatorParams lerpOscillatorParams(
       opacityFreq: lerpInt(params1.opacityFreq, params2.opacityFreq, blendValue),
       color: Color.lerp(params1.color, params2.color, blendValue)
     );
-  print(blendedParams);
   return blendedParams;
 }
 
