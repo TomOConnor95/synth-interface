@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 import './slider_tile.dart';
@@ -18,13 +21,17 @@ class MyApp extends StatelessWidget {
         // This is the theme of your application.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Preset Editor'),
+      home: MyHomePage(
+        title: 'Preset Editor',
+        channel: IOWebSocketChannel.connect('ws://127.0.0.1:6666'),
+      ),
     );
   }
 }
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, @required this.channel}) : super(key: key);
 
+  final WebSocketChannel channel;
   final String title;
 
   @override
@@ -61,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage>
   _lengthSlider1Callback(newValue) {
     setState(() => _lengthSlider1 = newValue);
     setState(() => _oscillatorParams1.length = newValue);
+    widget.channel.sink.add('Slider1: ${newValue.toString()}');
   }
   _lengthSlider2Callback(newValue) {
     setState(() => _lengthSlider2 = newValue);
@@ -349,6 +357,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void dispose() {
     _controller.dispose();
+    widget.channel.sink.close();
     super.dispose();
   }
 
