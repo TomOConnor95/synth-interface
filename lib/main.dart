@@ -101,82 +101,97 @@ class _MyHomePageState extends State<MyHomePage>
   _lengthSlider1Callback(newValue) {
     setState(() => _lengthSlider1 = newValue);
     setState(() => _oscillatorParams1.length = newValue);
-
     sendParametersToSynth(widget.channel, _presetFromSliders());
-    
   }
   _lengthSlider2Callback(newValue) {
     setState(() => _lengthSlider2 = newValue);
     setState(() => _oscillatorParams2.length = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _lengthSlider3Callback(newValue) {
     setState(() => _lengthSlider3 = newValue);
     setState(() => _oscillatorParams3.length = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
 
   _freqSlider1Callback(newValue) {
     setState(() => _freqSlider1 = newValue);
     setState(() => _oscillatorParams1.freq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _freqSlider2Callback(newValue) {
     setState(() => _freqSlider2 = newValue);
     setState(() => _oscillatorParams2.freq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _freqSlider3Callback(newValue) {
     setState(() => _freqSlider3 = newValue);
     setState(() => _oscillatorParams3.freq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
 
   _widthAmpSlider1Callback(newValue) {
     setState(() => _widthAmpSlider1 = newValue);
     setState(() => _oscillatorParams1.widthAmp = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _widthAmpSlider2Callback(newValue) {
     setState(() => _widthAmpSlider2 = newValue);
     setState(() => _oscillatorParams2.widthAmp = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _widthAmpSlider3Callback(newValue) {
     setState(() => _widthAmpSlider3 = newValue);
     setState(() => _oscillatorParams3.widthAmp = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
 
   _widthFreqSlider1Callback(newValue) {
     setState(() => _widthFreqSlider1 = newValue);
     setState(() => _oscillatorParams1.widthFreq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _widthFreqSlider2Callback(newValue) {
     setState(() => _widthFreqSlider2 = newValue);
     setState(() => _oscillatorParams2.widthFreq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _widthFreqSlider3Callback(newValue) {
     setState(() => _widthFreqSlider3 = newValue);
     setState(() => _oscillatorParams3.widthFreq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
 
   _opacityAmpSlider1Callback(newValue) {
     setState(() => _opacityAmpSlider1 = newValue);
     setState(() => _oscillatorParams1.opacityAmp = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _opacityAmpSlider2Callback(newValue) {
     setState(() => _opacityAmpSlider2 = newValue);
     setState(() => _oscillatorParams2.opacityAmp = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
   _opacityAmpSlider3Callback(newValue) {
     setState(() => _opacityAmpSlider3 = newValue);
     setState(() => _oscillatorParams3.opacityAmp = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
 
   _opacityFreqSlider1Callback(newValue) {
     setState(() => _opacityFreqSlider1 = newValue);
     setState(() => _oscillatorParams1.opacityFreq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
    _opacityFreqSlider2Callback(newValue) {
     setState(() => _opacityFreqSlider2 = newValue);
     setState(() => _oscillatorParams2.opacityFreq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
    _opacityFreqSlider3Callback(newValue) {
     setState(() => _opacityFreqSlider3 = newValue);
     setState(() => _oscillatorParams3.opacityFreq = newValue);
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
 
 
@@ -349,6 +364,7 @@ class _MyHomePageState extends State<MyHomePage>
         _params3,
       );
     }
+    sendParametersToSynth(widget.channel, _presetFromSliders());
   }
 
   bool _isBlendPresetButtonDisabled = true;
@@ -665,6 +681,7 @@ class _MyHomePageState extends State<MyHomePage>
                           _presets[position][1],
                           _presets[position][2],
                         );
+                        sendParametersToSynth(widget.channel, _presetFromSliders());
                       },
                       trailing: IconButton(
                         icon: const Icon(Icons.remove_circle_outline),
