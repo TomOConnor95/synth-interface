@@ -193,7 +193,14 @@ class _MyHomePageState extends State<MyHomePage>
 
   var _presets = new List<List<OscillatorParams>>();
 
-  void _savePreset() {
+  void _savePreset(List<OscillatorParams> preset) {
+  
+    setState(() => _presets.add(preset));
+
+    enablePresetBlendingIfNecessary();
+  }
+
+  void _savePresetFromSliders() {
     var _params1 = OscillatorParams(
       length: _lengthSlider1,
       freq: _freqSlider1,
@@ -223,9 +230,7 @@ class _MyHomePageState extends State<MyHomePage>
     );
     var preset = [_params1, _params2, _params3];
 
-    setState(() => _presets.add(preset));
-
-    enablePresetBlendingIfNecessary();
+    _savePreset(preset);
   }
 
   
@@ -386,7 +391,7 @@ class _MyHomePageState extends State<MyHomePage>
           ),
         ),
         RaisedButton(
-          onPressed: _savePreset,
+          onPressed: _savePresetFromSliders,
           child: Text('Save Preset',
             style: TextStyle(color: Colors.white)
           ),
@@ -405,7 +410,12 @@ class _MyHomePageState extends State<MyHomePage>
           onPressed: _isBlendPresetButtonDisabled ? null : () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PresetBlenderPage(_presets)),
+              MaterialPageRoute(
+                builder: (context) => PresetBlenderPage(
+                  _presets,
+                  _savePreset,
+                ),
+              ),
             );
           },
         ),

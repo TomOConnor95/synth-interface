@@ -3,9 +3,10 @@ import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 
 class PresetBlenderPage extends StatefulWidget {
-  PresetBlenderPage(this.presets);
+  PresetBlenderPage(this.presets, this.savePreset);
 
   final List<List<OscillatorParams>> presets;
+  @required final void Function(List<OscillatorParams>) savePreset;
 
   @override
   _PresetBlenderPageState createState() => _PresetBlenderPageState();
@@ -152,6 +153,22 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
                   ),
                 ),
               ],
+            ),
+            RaisedButton(
+              onPressed: () => widget.savePreset(
+                [
+                  lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue),
+                  lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
+                  lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
+                ]
+              ),
+              child: Text('Save Preset',
+                style: TextStyle(color: Colors.white)
+              ),
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)
+              ),
             ),
             RaisedButton(
               onPressed: () {
