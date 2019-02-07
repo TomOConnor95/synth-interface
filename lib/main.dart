@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'dart:convert';
+
 import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 import './slider_tile.dart';
@@ -65,10 +67,43 @@ class _MyHomePageState extends State<MyHomePage>
   int _opacityFreqSlider2;
   int _opacityFreqSlider3;
   
+  void sendParametersToSynth(WebSocketChannel channel, List<OscillatorParams> preset) {
+      var paramsToSend = {
+      'oscillator1': {
+        'length': preset[0].length,
+        'freq': preset[0].freq,
+        'widthAmp': preset[0].widthAmp,
+        'widthFreq': preset[0].widthFreq,
+        'opacityAmp': preset[0].opacityAmp,
+        'opacityFreq': preset[0].opacityFreq,
+      },
+      'oscillator2': {
+        'length': preset[1].length,
+        'freq': preset[1].freq,
+        'widthAmp': preset[1].widthAmp,
+        'widthFreq': preset[1].widthFreq,
+        'opacityAmp': preset[1].opacityAmp,
+        'opacityFreq': preset[1].opacityFreq,
+      },
+      'oscillator3': {
+        'length': preset[2].length,
+        'freq': preset[2].freq,
+        'widthAmp': preset[2].widthAmp,
+        'widthFreq': preset[2].widthFreq,
+        'opacityAmp': preset[2].opacityAmp,
+        'opacityFreq': preset[2].opacityFreq,
+      }
+    };
+    
+    channel.sink.add(json.encode(paramsToSend));
+  } 
+
   _lengthSlider1Callback(newValue) {
     setState(() => _lengthSlider1 = newValue);
     setState(() => _oscillatorParams1.length = newValue);
-    widget.channel.sink.add('Slider1: ${newValue.toString()}');
+
+    sendParametersToSynth(widget.channel, _presetFromSliders());
+    
   }
   _lengthSlider2Callback(newValue) {
     setState(() => _lengthSlider2 = newValue);
@@ -200,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage>
     enablePresetBlendingIfNecessary();
   }
 
-  void _savePresetFromSliders() {
+  List<OscillatorParams> _presetFromSliders() {
     var _params1 = OscillatorParams(
       length: _lengthSlider1,
       freq: _freqSlider1,
@@ -229,8 +264,7 @@ class _MyHomePageState extends State<MyHomePage>
       color: _color3,
     );
     var preset = [_params1, _params2, _params3];
-
-    _savePreset(preset);
+    return preset;
   }
 
   
@@ -391,7 +425,7 @@ class _MyHomePageState extends State<MyHomePage>
           ),
         ),
         RaisedButton(
-          onPressed: _savePresetFromSliders,
+          onPressed: () => _savePreset(_presetFromSliders()),
           child: Text('Save Preset',
             style: TextStyle(color: Colors.white)
           ),
