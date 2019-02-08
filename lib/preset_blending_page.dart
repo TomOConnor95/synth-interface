@@ -3,10 +3,11 @@ import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 
 class PresetBlenderPage extends StatefulWidget {
-  PresetBlenderPage(this.presets, this.savePreset);
+  PresetBlenderPage(this.presets, this.savePreset, this.sendParametersToSynth);
 
   final List<List<OscillatorParams>> presets;
   @required final void Function(List<OscillatorParams>) savePreset;
+  @required final void Function(List<OscillatorParams>) sendParametersToSynth;
 
   @override
   _PresetBlenderPageState createState() => _PresetBlenderPageState();
@@ -109,7 +110,16 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
                           ),
                         ),
                       ),
-                      onChanged: (value) => setState(presetSelectedLeft = value),
+                      onChanged: (value) {
+                        setState(() {
+                          presetSelectedLeft = value;
+                        });
+                        widget.sendParametersToSynth([
+                          lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue),
+                          lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
+                          lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
+                        ]);
+                      }
                     ),
                   ),
                 ),
@@ -120,6 +130,11 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
                       setState(() {
                         _blendSliderValue = newValue;             
                       });
+                      widget.sendParametersToSynth([
+                        lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue),
+                        lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
+                        lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
+                      ]);
                     },
                   ),
                 ),
@@ -148,7 +163,16 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
                           ),
                         ),
                       ),
-                      onChanged: (value) => setState(presetSelectedRight = value),
+                      onChanged: (value) {
+                        setState(() {
+                          presetSelectedRight = value;
+                        });
+                        widget.sendParametersToSynth([
+                          lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue),
+                          lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
+                          lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
+                        ]);
+                      }
                     ),
                   ),
                 ),

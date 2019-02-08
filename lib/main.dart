@@ -464,6 +464,9 @@ class _MyHomePageState extends State<MyHomePage>
                 builder: (context) => PresetBlenderPage(
                   _presets,
                   _savePreset,
+                  (preset) {
+                    sendParametersToSynth(widget.channel, preset);
+                  },
                 ),
               ),
             );
