@@ -17,6 +17,8 @@ dependencies:
     sdk: flutter
   flutter_colorpicker: any
   web_socket_channel:
+  flutter_redux: ^0.5.3
+  redux:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
