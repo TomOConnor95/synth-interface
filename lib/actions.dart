@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 class SavePreset {
 }
 
+class DeletePreset {
+  final int presetNumber;
+  DeletePreset(this.presetNumber);
+}
+
 class RecallPreset {
   final int presetNumber;
   RecallPreset(this.presetNumber);

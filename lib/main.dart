@@ -28,6 +28,10 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
     state.savedPresets.add(newPreset);
     return state;
   }
+  if (action is DeletePreset) {
+    state.savedPresets.removeAt(action.presetNumber);
+    return state;
+  }
   if (action is RecallPreset) {
     var newPreset = deepCopyPreset(state.savedPresets[action.presetNumber]);
     state.currentParams = newPreset;
@@ -485,15 +489,10 @@ class PresetDisplay extends StatelessWidget {
                       ),
                     ),
                     onTap: () => store.dispatch(RecallPreset(position)),
-                    // trailing: IconButton(
-                    //   icon: const Icon(Icons.remove_circle_outline),
-                    //   onPressed: () {
-                    //     setState(() {
-                    //       _presets.removeAt(position);
-                    //     });
-                    //     enablePresetBlendingIfNecessary();
-                    //   },
-                    // ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.remove_circle_outline),
+                      onPressed: () => store.dispatch(DeletePreset(position))
+                    ),
                   ),
                 ],
               );
