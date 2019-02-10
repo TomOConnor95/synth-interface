@@ -24,7 +24,8 @@ class ReduxState {
 
 ReduxState counterReducer(ReduxState state, dynamic action) {
   if (action is SavePreset) {
-    state.savedPresets.add(action.preset);
+    var newPreset = deepCopyPreset(state.currentParams);
+    state.savedPresets.add(newPreset);
     return state;
   }
   if (action is RecallPreset) {
@@ -288,10 +289,7 @@ class _MyHomePageState extends State<MyHomePage>
         // ),
         StoreConnector<ReduxState, VoidCallback>(
           converter: (store) {
-            // Return a `VoidCallback`, which is a fancy name for a function
-            // with no parameters. It only dispatches an Increment action.
-            var newPreset = deepCopyPreset(store.state.currentParams);
-            return () => store.dispatch(SavePreset(newPreset));
+            return () => store.dispatch(SavePreset());
           },
           builder: (context, callback) {
             return RaisedButton(
