@@ -24,12 +24,12 @@ class ReduxState {
 
 ReduxState counterReducer(ReduxState state, dynamic action) {
   if (action is SavePreset) {
-    //Something's not right here
-    state.savedPresets.add(state.currentParams);
+    state.savedPresets.add(action.preset);
     return state;
   }
   if (action is RecallPreset) {
-    state.currentParams = state.savedPresets[action.presetNumber];
+    var newPreset = deepCopyPreset(state.savedPresets[action.presetNumber]);
+    state.currentParams = newPreset;
     return state;
   }
   if (action is LengthCallback) {
@@ -290,7 +290,8 @@ class _MyHomePageState extends State<MyHomePage>
           converter: (store) {
             // Return a `VoidCallback`, which is a fancy name for a function
             // with no parameters. It only dispatches an Increment action.
-            return () => store.dispatch(SavePreset());
+            var newPreset = deepCopyPreset(store.state.currentParams);
+            return () => store.dispatch(SavePreset(newPreset));
           },
           builder: (context, callback) {
             return RaisedButton(
@@ -367,6 +368,39 @@ class _MyHomePageState extends State<MyHomePage>
   }
 }
 
+List<OscillatorParams> deepCopyPreset(preset) {
+  var newPreset = [
+    OscillatorParams(
+      length: preset[0].length,
+      freq: preset[0].freq,
+      widthAmp: preset[0].widthAmp,
+      widthFreq: preset[0].widthFreq,
+      opacityAmp: preset[0].opacityAmp,
+      opacityFreq: preset[0].opacityFreq,
+      color: preset[0].color,
+    ),
+    OscillatorParams(
+      length: preset[1].length,
+      freq: preset[1].freq,
+      widthAmp: preset[1].widthAmp,
+      widthFreq: preset[1].widthFreq,
+      opacityAmp: preset[1].opacityAmp,
+      opacityFreq: preset[1].opacityFreq,
+      color: preset[1].color,
+    ),
+    OscillatorParams(
+      length: preset[2].length,
+      freq: preset[2].freq,
+      widthAmp: preset[2].widthAmp,
+      widthFreq: preset[2].widthFreq,
+      opacityAmp: preset[2].opacityAmp,
+      opacityFreq: preset[2].opacityFreq,
+      color: preset[2].color,
+    )
+  ];
+  return newPreset;
+}
+
 class OscillatorPanel extends StatelessWidget {
   final int oscNum;
   OscillatorPanel(this.oscNum);
@@ -441,13 +475,13 @@ class PresetDisplay extends StatelessWidget {
   PresetDisplay(this.animationAngle);
 
   Widget build(BuildContext context) {
-    return StoreConnector<ReduxState, ReduxState>(
-      converter: (store) => store.state,
-      builder: (context, state) {
+    return StoreConnector<ReduxState, Store<ReduxState>>(
+      converter: (store) => store,
+      builder: (context, store) {
         return SizedBox(
-          height: state.savedPresets.length * 70.0,
+          height: store.state.savedPresets.length * 70.0,
           child: ListView.builder(
-            itemCount: state.savedPresets.length,
+            itemCount: store.state.savedPresets.length,
             padding: const EdgeInsets.all(3.0),
             itemBuilder: (context, position) {
               return Column(
@@ -466,14 +500,14 @@ class PresetDisplay extends StatelessWidget {
                       child: Transform.scale(
                         scale: 0.65,
                         child: presetGaugeDisplay(
-                          state.savedPresets[position][0],
-                          state.savedPresets[position][1],
-                          state.savedPresets[position][2],
+                          store.state.savedPresets[position][0],
+                          store.state.savedPresets[position][1],
+                          store.state.savedPresets[position][2],
                           animationAngle,
                         )
                       ),
                     ),
-                    onTap: () => {} //store.dispatch(RecallPreset(position))
+                    onTap: () => store.dispatch(RecallPreset(position))
                     // trailing: IconButton(
                     //   icon: const Icon(Icons.remove_circle_outline),
                     //   onPressed: () {

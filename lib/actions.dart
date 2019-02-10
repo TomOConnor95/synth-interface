@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import './oscillator_params.dart';
+
 
 class SavePreset {
+  final List<OscillatorParams> preset;
+  SavePreset(this.preset);
 }
 
 class RecallPreset {
