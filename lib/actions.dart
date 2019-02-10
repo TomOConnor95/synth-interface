@@ -9,6 +9,11 @@ class RecallPreset {
   RecallPreset(this.presetNumber);
 }
 
+class RandomiseParameters {
+  final int oscillatorToRandomise;
+  RandomiseParameters({this.oscillatorToRandomise});
+}
+
 class LengthCallback {
   final int oscillatorNumber;
   final double value;

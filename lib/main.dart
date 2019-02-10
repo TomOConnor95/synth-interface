@@ -33,6 +33,20 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
     state.currentParams = newPreset;
     return state;
   }
+  if (action is RandomiseParameters) {
+    if (action.oscillatorToRandomise == 0) {
+      state.currentParams[0] = randomOscillatorParams();
+    } else if (action.oscillatorToRandomise == 1) {
+      state.currentParams[0] = randomOscillatorParams();
+    } else if (action.oscillatorToRandomise == 2) {
+      state.currentParams[0] = randomOscillatorParams();
+    } else {
+      state.currentParams[0] = randomOscillatorParams();
+      state.currentParams[1] = randomOscillatorParams();
+      state.currentParams[2] = randomOscillatorParams();
+    }
+    return state;
+  }
   if (action is LengthCallback) {
     state.currentParams[action.oscillatorNumber].length = action.value;
     return state;
@@ -61,8 +75,6 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
     state.currentParams[action.oscillatorNumber].color = action.value;
     return state;
   }
-
-  // need to add reducers for randomising parameters
 
   return state;
 
@@ -179,46 +191,7 @@ class _MyHomePageState extends State<MyHomePage>
     channel.sink.add(json.encode(paramsToSend));
   } 
 
-  // void _randomiseParameters({int oscillatorNum}) {
-  //   OscillatorParams _params1;
-  //   OscillatorParams _params2;
-  //   OscillatorParams _params3;
-    
-  //   if (oscillatorNum == 1) {
-  //     _params1 = randomOscillatorParams();
-  //     setState(() {
-  //       _oscillatorParams1 = _params1;
-  //     });
-  //     updateOscillatorInputElements1(_params1);
-  //   } else if (oscillatorNum == 2) {
-  //     _params2 = randomOscillatorParams();
-  //     setState(() {
-  //       _oscillatorParams2 = _params2;
-  //     });
-  //     updateOscillatorInputElements2(_params2);
-  //   } else if (oscillatorNum == 3) {
-  //     _params3 = randomOscillatorParams();
-  //     setState(() {
-  //       _oscillatorParams3 = _params3;
-  //     });
-  //     updateOscillatorInputElements3(_params3);
-  //   } else {
-  //     _params1 = randomOscillatorParams();
-  //     _params2 = randomOscillatorParams();
-  //     _params3 = randomOscillatorParams();
-  //     setState(() {
-  //       _oscillatorParams1 = _params1;
-  //       _oscillatorParams2 = _params2;
-  //       _oscillatorParams3 = _params3;
-  //     });
-  //     updateAllInputElements(
-  //       _params1,
-  //       _params2,
-  //       _params3,
-  //     );
-  //   }
-  //   sendParametersToSynth(widget.channel, _presetFromParams());
-  // }
+  
 
   // bool _isBlendPresetButtonDisabled = true;
 
@@ -277,16 +250,23 @@ class _MyHomePageState extends State<MyHomePage>
         title: Text(widget.title),
       ),
       persistentFooterButtons: <Widget>[
-        // RaisedButton(
-        //   onPressed: _randomiseParameters,
-        //   child: Text('Randomise',
-        //     style: TextStyle(color: Colors.white)
-        //   ),
-        //   color: Colors.red,
-        //   shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.circular(10.0)
-        //   ),
-        // ),
+        StoreConnector<ReduxState, VoidCallback>(
+          converter: (store) {
+            return () => store.dispatch(RandomiseParameters());
+          },
+          builder: (context, callback) {
+            return RaisedButton(
+              onPressed: callback,
+              child: Text('Randomise',
+                style: TextStyle(color: Colors.white)
+              ),
+              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)
+              ),
+            );
+          }
+        ),
         StoreConnector<ReduxState, VoidCallback>(
           converter: (store) {
             return () => store.dispatch(SavePreset());
@@ -413,8 +393,7 @@ class OscillatorPanel extends StatelessWidget {
             title: 'Oscillator ${oscNum + 1}',
             color: store.state.currentParams[oscNum].color,
             onColorChanged: (color) => store.dispatch(ColorCallback(oscNum, color)),
-            onShufflePressed: (
-            ) => {},
+            onShufflePressed: () => store.dispatch(RandomiseParameters(oscillatorToRandomise: oscNum))
           ),
           children: [
             SliderTile(
@@ -505,7 +484,7 @@ class PresetDisplay extends StatelessWidget {
                         )
                       ),
                     ),
-                    onTap: () => store.dispatch(RecallPreset(position))
+                    onTap: () => store.dispatch(RecallPreset(position)),
                     // trailing: IconButton(
                     //   icon: const Icon(Icons.remove_circle_outline),
                     //   onPressed: () {
