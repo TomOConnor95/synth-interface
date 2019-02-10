@@ -21,16 +21,13 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
   if (action is SavePreset) {
     var newPreset = deepCopyPreset(state.currentParams);
     state.savedPresets.add(newPreset);
-    return state;
   }
   if (action is DeletePreset) {
     state.savedPresets.removeAt(action.presetNumber);
-    return state;
   }
   if (action is RecallPreset) {
     var recalledPreset = deepCopyPreset(state.savedPresets[action.presetNumber]);
     state.currentParams = recalledPreset;
-    return state;
   }
   if (action is RandomiseParameters) {
     if (action.oscillatorToRandomise == 0) {
@@ -44,35 +41,27 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
       state.currentParams[1] = randomOscillatorParams();
       state.currentParams[2] = randomOscillatorParams();
     }
-    return state;
   }
   if (action is LengthCallback) {
     state.currentParams[action.oscillatorNumber].length = action.value;
-    return state;
   }
   if (action is FreqCallback) {
     state.currentParams[action.oscillatorNumber].freq = action.value;
-    return state;
   }
   if (action is WidthAmpCallback) {
     state.currentParams[action.oscillatorNumber].widthAmp = action.value;
-    return state;
   }
   if (action is WidthFreqCallback) {
     state.currentParams[action.oscillatorNumber].widthFreq = action.value;
-    return state;
   }
   if (action is OpacityAmpCallback) {
     state.currentParams[action.oscillatorNumber].opacityAmp = action.value;
-    return state;
   }
   if (action is OpacityFreqCallback) {
     state.currentParams[action.oscillatorNumber].opacityFreq = action.value;
-    return state;
   }
   if (action is ColorCallback) {
     state.currentParams[action.oscillatorNumber].color = action.value;
-    return state;
   }
   if (action is BlendPresets) {
     state.currentParams = [
@@ -80,10 +69,10 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
       lerpOscillatorParams(state.savedPresets[action.presetNumberA][1], state.savedPresets[action.presetNumberB][1], action.blendValue),
       lerpOscillatorParams(state.savedPresets[action.presetNumberA][2], state.savedPresets[action.presetNumberB][2], action.blendValue),
     ];
-    return state;
   }
-  return state;
 
+  sendParametersToSynth(state.channel, state.currentParams);
+  return state;
 }
 
 void main() {
@@ -122,7 +111,8 @@ void main() {
       counterReducer,
       initialState: ReduxState(
         initialParams,
-        []
+        [],
+        IOWebSocketChannel.connect('ws://127.0.0.1:6666'),
       )
     );
   runApp(MyApp(
@@ -130,43 +120,7 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({this.store});
-
-  final Store<ReduxState> store;
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return StoreProvider<ReduxState>(
-      store: store,
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(
-          title: 'Preset Editor',
-          channel: IOWebSocketChannel.connect('ws://127.0.0.1:6666'),
-        ),
-      ),
-    );
-  }
-}
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.channel}) : super(key: key);
-
-  final WebSocketChannel channel;
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
-  
-  void sendParametersToSynth(WebSocketChannel channel, List<OscillatorParams> preset) {
+void sendParametersToSynth(WebSocketChannel channel, List<OscillatorParams> preset) {
       var paramsToSend = {
       'oscillator1': {
         'length': preset[0].length,
@@ -197,6 +151,40 @@ class _MyHomePageState extends State<MyHomePage>
     channel.sink.add(json.encode(paramsToSend));
   } 
 
+class MyApp extends StatelessWidget {
+  MyApp({this.store});
+
+  final Store<ReduxState> store;
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return StoreProvider<ReduxState>(
+      store: store,
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(
+          title: 'Preset Editor',
+        ),
+      ),
+    );
+  }
+}
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+
   Animation<double> _angleAnimation;
   AnimationController _controller;
 
@@ -223,12 +211,12 @@ class _MyHomePageState extends State<MyHomePage>
     _controller.forward();
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    widget.channel.sink.close();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  //   widget.channel.sink.close();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +247,8 @@ class _MyHomePageState extends State<MyHomePage>
                 borderRadius: BorderRadius.circular(10.0)
               ),
             );
-          }
+          },
+          onDispose: (store) => store.state.channel.sink.close()
         ),
         StoreConnector<ReduxState, VoidCallback>(
           converter: (store) {
@@ -296,11 +285,7 @@ class _MyHomePageState extends State<MyHomePage>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PresetBlenderPage(
-                      (preset) {
-                        sendParametersToSynth(widget.channel, preset);
-                      },
-                    ),
+                    builder: (context) => PresetBlenderPage(),
                   ),
                 );
               },
