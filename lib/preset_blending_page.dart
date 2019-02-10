@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+
 import './preset_gauge_display.dart';
 import './oscillator_params.dart';
 
-class PresetBlenderPage extends StatefulWidget {
-  PresetBlenderPage(this.presets, this.savePreset, this.sendParametersToSynth);
+import './actions.dart';
+import './redux_state.dart';
 
-  final List<List<OscillatorParams>> presets;
-  @required final void Function(List<OscillatorParams>) savePreset;
+class PresetBlenderPage extends StatefulWidget {
+  PresetBlenderPage(this.sendParametersToSynth);
+
   @required final void Function(List<OscillatorParams>) sendParametersToSynth;
 
   @override
@@ -71,128 +74,153 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Container(
-              // padding: EdgeInsets.only(bottom: 40),
-              child: Transform.scale(
-                scale: 2.5,
-                child: presetGaugeDisplay(
-                  lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue), 
-                  lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
-                  lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
-                  _angleAnimation.value,
-                ),
-              ),
+            StoreConnector<ReduxState, ReduxState>(
+              converter: (store) => store.state,
+              builder: (context, state) {
+                return Container(
+                // padding: EdgeInsets.only(bottom: 40),
+                  child: Transform.scale(
+                    scale: 2.5,
+                    child: presetGaugeDisplay(
+                      state.currentParams[0],
+                      state.currentParams[1],
+                      state.currentParams[2],
+                      _angleAnimation.value,
+                    ),
+                  ),
+                );
+              }
             ),
             Row(
               children: <Widget>[
-                ButtonTheme(
-                  alignedDropdown: true,
-                  child:DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      value: presetSelectedLeft,
-                      elevation: 8,
-                      items: List<DropdownMenuItem<int>>.generate(
-                        widget.presets.length,
-                        (int index) => DropdownMenuItem(
-                          value: index,
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            child: Transform.scale(
-                              scale: index == presetSelectedLeft ? 0.7 : 0.5,
-                              child: presetGaugeDisplay(
-                                widget.presets[index][0], 
-                                widget.presets[index][1],
-                                widget.presets[index][2],
-                                _angleAnimation.value,
+                StoreConnector<ReduxState, ReduxState>(
+                  converter: (store) => store.state,
+                  builder: (context, state) {
+                    return ButtonTheme(
+                      alignedDropdown: true,
+                      child:DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: presetSelectedLeft,
+                          elevation: 8,
+                          items: List<DropdownMenuItem<int>>.generate(
+                            state.savedPresets.length,
+                            (int index) => DropdownMenuItem(
+                              value: index,
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                child: Transform.scale(
+                                  scale: index == presetSelectedLeft ? 0.7 : 0.5,
+                                  child: presetGaugeDisplay(
+                                    state.savedPresets[index][0], 
+                                    state.savedPresets[index][1],
+                                    state.savedPresets[index][2],
+                                    _angleAnimation.value,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
+                          onChanged: (value) {
+                            setState(() {
+                              presetSelectedLeft = value;
+                            });
+                            
+                            // widget.sendParametersToSynth([
+                            //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][0], state.savedPresets[presetSelectedRight][0], _blendSliderValue),
+                            //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][1], state.savedPresets[presetSelectedRight][1], _blendSliderValue),
+                            //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][2], state.savedPresets[presetSelectedRight][2], _blendSliderValue),
+                            // ]);
+                          }
                         ),
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          presetSelectedLeft = value;
-                        });
-                        widget.sendParametersToSynth([
-                          lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue),
-                          lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
-                          lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
-                        ]);
-                      }
-                    ),
-                  ),
+                    );
+                  }
                 ),
-                Expanded(
-                  child: Slider(
-                    value: _blendSliderValue,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _blendSliderValue = newValue;             
-                      });
-                      widget.sendParametersToSynth([
-                        lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue),
-                        lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
-                        lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
-                      ]);
-                    },
-                  ),
+                StoreConnector<ReduxState, VoidCallback>(
+                  converter: (store) {
+                    return () => store.dispatch(BlendPresets(presetSelectedLeft, presetSelectedRight, _blendSliderValue));
+                  },
+                  builder: (context, callback) {
+                    return Expanded(
+                      child: Slider(
+                        value: _blendSliderValue,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _blendSliderValue = newValue;             
+                          });
+                          callback();
+                          // widget.sendParametersToSynth([
+                          //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][0], state.savedPresets[presetSelectedRight][0], _blendSliderValue),
+                          //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][1], state.savedPresets[presetSelectedRight][1], _blendSliderValue),
+                          //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][2], state.savedPresets[presetSelectedRight][2], _blendSliderValue),
+                          // ]);
+                        },
+                      ),
+                    );
+                  }
                 ),
-                ButtonTheme(
-                  alignedDropdown: true,
-                  child:DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      value: presetSelectedRight,
-                      elevation: 8,
-                      items: List<DropdownMenuItem<int>>.generate(
-                        widget.presets.length,
-                        (int index) => DropdownMenuItem(
-                          value: index,
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            child: Transform.scale(
-                              scale: index == presetSelectedRight ? 0.7 : 0.5,
-                              child: presetGaugeDisplay(
-                                widget.presets[index][0], 
-                                widget.presets[index][1],
-                                widget.presets[index][2],
-                                _angleAnimation.value,
+                StoreConnector<ReduxState, ReduxState>(
+                  converter: (store) => store.state,
+                  builder: (context, state) {
+                    return ButtonTheme(
+                      alignedDropdown: true,
+                      child:DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: presetSelectedRight,
+                          elevation: 8,
+                          items: List<DropdownMenuItem<int>>.generate(
+                            state.savedPresets.length,
+                            (int index) => DropdownMenuItem(
+                              value: index,
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                child: Transform.scale(
+                                  scale: index == presetSelectedRight ? 0.7 : 0.5,
+                                  child: presetGaugeDisplay(
+                                    state.savedPresets[index][0], 
+                                    state.savedPresets[index][1],
+                                    state.savedPresets[index][2],
+                                    _angleAnimation.value,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
+                          onChanged: (value) {
+                            setState(() {
+                              presetSelectedRight = value;
+                            });
+                            // widget.sendParametersToSynth([
+                            //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][0], state.savedPresets[presetSelectedRight][0], _blendSliderValue),
+                            //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][1], state.savedPresets[presetSelectedRight][1], _blendSliderValue),
+                            //   lerpOscillatorParams(state.savedPresets[presetSelectedLeft][2], state.savedPresets[presetSelectedRight][2], _blendSliderValue),
+                            // ]);
+                          }
                         ),
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          presetSelectedRight = value;
-                        });
-                        widget.sendParametersToSynth([
-                          lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue),
-                          lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
-                          lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
-                        ]);
-                      }
-                    ),
-                  ),
+                    );
+                  }
                 ),
               ],
             ),
-            RaisedButton(
-              onPressed: () => widget.savePreset(
-                [
-                  lerpOscillatorParams(widget.presets[presetSelectedLeft][0], widget.presets[presetSelectedRight][0], _blendSliderValue),
-                  lerpOscillatorParams(widget.presets[presetSelectedLeft][1], widget.presets[presetSelectedRight][1], _blendSliderValue),
-                  lerpOscillatorParams(widget.presets[presetSelectedLeft][2], widget.presets[presetSelectedRight][2], _blendSliderValue),
-                ]
-              ),
-              child: Text('Save Preset',
-                style: TextStyle(color: Colors.white)
-              ),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0)
-              ),
+            StoreConnector<ReduxState, VoidCallback>(
+              converter: (store) {
+                return () => store.dispatch(SavePreset());
+              },
+              builder: (context, callback) {
+                return RaisedButton(
+                  onPressed: callback,
+                  child: Text('Save Preset',
+                    style: TextStyle(color: Colors.white)
+                  ),
+                  color: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)
+                  ),
+                );
+              }
             ),
             RaisedButton(
               onPressed: () {

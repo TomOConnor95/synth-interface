@@ -68,4 +68,9 @@ class ColorCallback {
   ColorCallback(this.oscillatorNumber, this.value);
 }
 
-
+class BlendPresets {
+  final int presetNumberA;
+  final int presetNumberB;
+  final double blendValue;
+  BlendPresets(this.presetNumberA, this.presetNumberB, this.blendValue);
+}

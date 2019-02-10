@@ -14,13 +14,8 @@ import './oscillator_title_row.dart';
 import './preset_blending_page.dart';
 
 import './actions.dart';
+import './redux_state.dart';
 
-class ReduxState {
-  var currentParams;
-  var savedPresets;
-
-  ReduxState(this.currentParams, this.savedPresets);
-}
 
 ReduxState counterReducer(ReduxState state, dynamic action) {
   if (action is SavePreset) {
@@ -33,8 +28,8 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
     return state;
   }
   if (action is RecallPreset) {
-    var newPreset = deepCopyPreset(state.savedPresets[action.presetNumber]);
-    state.currentParams = newPreset;
+    var recalledPreset = deepCopyPreset(state.savedPresets[action.presetNumber]);
+    state.currentParams = recalledPreset;
     return state;
   }
   if (action is RandomiseParameters) {
@@ -79,7 +74,14 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
     state.currentParams[action.oscillatorNumber].color = action.value;
     return state;
   }
-
+  if (action is BlendPresets) {
+    state.currentParams = [
+      lerpOscillatorParams(state.savedPresets[action.presetNumberA][0], state.savedPresets[action.presetNumberB][0], action.blendValue),
+      lerpOscillatorParams(state.savedPresets[action.presetNumberA][1], state.savedPresets[action.presetNumberB][1], action.blendValue),
+      lerpOscillatorParams(state.savedPresets[action.presetNumberA][2], state.savedPresets[action.presetNumberB][2], action.blendValue),
+    ];
+    return state;
+  }
   return state;
 
 }
@@ -195,18 +197,6 @@ class _MyHomePageState extends State<MyHomePage>
     channel.sink.add(json.encode(paramsToSend));
   } 
 
-  
-
-  // bool _isBlendPresetButtonDisabled = true;
-
-  // void enablePresetBlendingIfNecessary(){
-  //   if (_presets.length >= 2){
-  //     _isBlendPresetButtonDisabled = false;
-  //   } else {
-  //     _isBlendPresetButtonDisabled = true;
-  //   }
-  // }
-
   Animation<double> _angleAnimation;
   AnimationController _controller;
 
@@ -291,29 +281,32 @@ class _MyHomePageState extends State<MyHomePage>
           },
         ),
 
-        // RaisedButton(
-        //   child: Text('Blend Presets',
-        //     style: TextStyle(color: Colors.white)
-        //   ),
-        //   shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.circular(30.0)
-        //   ),
-        //   // Do this check based on redux state
-        //   onPressed: _isBlendPresetButtonDisabled ? null : () {
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (context) => PresetBlenderPage(
-        //           _presets,
-        //           _savePreset,
-        //           (preset) {
-        //             sendParametersToSynth(widget.channel, preset);
-        //           },
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // ),
+        StoreConnector<ReduxState, ReduxState>(
+          converter: (store) => store.state,
+          builder: (context, state) {
+            return RaisedButton(
+              child: Text('Blend Presets',
+                style: TextStyle(color: Colors.white)
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)
+              ),
+              // Do this check based on redux state
+              onPressed: (state.savedPresets.length < 2) ? null : () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PresetBlenderPage(
+                      (preset) {
+                        sendParametersToSynth(widget.channel, preset);
+                      },
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        ),
       ],
       body: Center(
         child: ListView(
