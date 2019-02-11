@@ -4,7 +4,7 @@ import './circle_sector.dart';
 import './oscillator_params.dart';
 
 
-Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, OscillatorParams oscillatorParams2, OscillatorParams oscillatorParams3, double animationAngle) {
+Widget presetGaugeDisplay(List<OscillatorParams> preset, double animationAngle) {
     double angleInRadians = animationAngle / 360 * 2 * pi;
     double size = 100;
     double width = 8;
@@ -16,40 +16,40 @@ Widget presetGaugeDisplay(OscillatorParams oscillatorParams1, OscillatorParams o
     return Stack(
       children: <Widget>[
         oscillatorAnimation(
-          oscillatorParams1.length*100,
-          oscillatorParams1.freq,
-          oscillatorParams1.widthAmp,
-          oscillatorParams1.widthFreq, 
-          oscillatorParams1.opacityAmp, 
-          oscillatorParams1.opacityFreq,
+          preset[0].length*100,
+          preset[0].freq,
+          preset[0].widthAmp,
+          preset[0].widthFreq, 
+          preset[0].opacityAmp, 
+          preset[0].opacityFreq,
           radius1,
-          oscillatorParams1.color,
+          preset[0].color,
           width,
           angleInRadians,
           size,
         ),
         oscillatorAnimation(
-          oscillatorParams2.length*100,
-          oscillatorParams2.freq,
-          oscillatorParams2.widthAmp,
-          oscillatorParams2.widthFreq, 
-          oscillatorParams2.opacityAmp, 
-          oscillatorParams2.opacityFreq,
+          preset[1].length*100,
+          preset[1].freq,
+          preset[1].widthAmp,
+          preset[1].widthFreq, 
+          preset[1].opacityAmp, 
+          preset[1].opacityFreq,
           radius2,
-          oscillatorParams2.color,
+          preset[1].color,
           width,
           angleInRadians,
           size,
         ),
         oscillatorAnimation(
-          oscillatorParams3.length*100,
-          oscillatorParams3.freq,
-          oscillatorParams3.widthAmp,
-          oscillatorParams3.widthFreq, 
-          oscillatorParams3.opacityAmp, 
-          oscillatorParams3.opacityFreq,
+          preset[2].length*100,
+          preset[2].freq,
+          preset[2].widthAmp,
+          preset[2].widthFreq, 
+          preset[2].opacityAmp, 
+          preset[2].opacityFreq,
           radius3,
-          oscillatorParams3.color,
+          preset[2].color,
           width,
           angleInRadians,
           size,

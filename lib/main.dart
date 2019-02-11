@@ -12,6 +12,7 @@ import './slider_tile.dart';
 import './amp_freq_knobs.dart';
 import './oscillator_title_row.dart';
 import './preset_blending_page.dart';
+import './current_params_guage_display.dart';
 
 import './actions.dart';
 import './redux_state.dart';
@@ -63,11 +64,24 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
   if (action is ColorCallback) {
     state.currentParams[action.oscillatorNumber].color = action.value;
   }
-  if (action is BlendPresets) {
+  
+  if (action is LeftPresetSelectorCallback) {
+    state.presetSelectedLeft = action.presetNumber;
+  }
+  if (action is RightPresetSelectorCallback) {
+    state.presetSelectedRight = action.presetNumber;
+  }
+  if (action is BlendSliderCallback) {
+    state.blendValue = action.blendValue;
+  }
+  if (action is BlendPresets || 
+      action is LeftPresetSelectorCallback || 
+      action is RightPresetSelectorCallback
+  ) {
     state.currentParams = [
-      lerpOscillatorParams(state.savedPresets[action.presetNumberA][0], state.savedPresets[action.presetNumberB][0], action.blendValue),
-      lerpOscillatorParams(state.savedPresets[action.presetNumberA][1], state.savedPresets[action.presetNumberB][1], action.blendValue),
-      lerpOscillatorParams(state.savedPresets[action.presetNumberA][2], state.savedPresets[action.presetNumberB][2], action.blendValue),
+      lerpOscillatorParams(state.savedPresets[state.presetSelectedLeft][0], state.savedPresets[state.presetSelectedRight][0], state.blendValue),
+      lerpOscillatorParams(state.savedPresets[state.presetSelectedLeft][1], state.savedPresets[state.presetSelectedRight][1], state.blendValue),
+      lerpOscillatorParams(state.savedPresets[state.presetSelectedLeft][2], state.savedPresets[state.presetSelectedRight][2], state.blendValue),
     ];
   }
 
@@ -113,6 +127,9 @@ void main() {
         initialParams,
         [],
         IOWebSocketChannel.connect('ws://127.0.0.1:6666'),
+        0,
+        1,
+        0.5,
       )
     );
   runApp(MyApp(
@@ -296,24 +313,14 @@ class _MyHomePageState extends State<MyHomePage>
       body: Center(
         child: ListView(
           children: <Widget>[
-            StoreConnector<ReduxState, ReduxState>(
-              converter: (store) => store.state,
-              builder: (context, state) {
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  height: 190,
-                  width: 200,
-                  child: Transform.scale(
-                    scale: 2,
-                    child: presetGaugeDisplay(
-                      state.currentParams[0],
-                      state.currentParams[1],
-                      state.currentParams[2],
-                      _angleAnimation.value,
-                    )
-                  )
-                );
-              }
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              height: 190,
+              width: 200,
+              child: Transform.scale(
+                scale: 2,
+                child: CurrentParamsGuageDisplay(_angleAnimation.value)
+              )
             ),
             OscillatorPanel(0),
             OscillatorPanel(1),
@@ -430,9 +437,8 @@ class OscillatorPanel extends StatelessWidget {
 class PresetDisplay extends StatelessWidget {
   final double animationAngle;
 
-  @override
   PresetDisplay(this.animationAngle);
-
+  @override
   Widget build(BuildContext context) {
     return StoreConnector<ReduxState, Store<ReduxState>>(
       converter: (store) => store,
@@ -459,9 +465,7 @@ class PresetDisplay extends StatelessWidget {
                       child: Transform.scale(
                         scale: 0.65,
                         child: presetGaugeDisplay(
-                          store.state.savedPresets[position][0],
-                          store.state.savedPresets[position][1],
-                          store.state.savedPresets[position][2],
+                          store.state.savedPresets[position],
                           animationAngle,
                         )
                       ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import './preset_gauge_display.dart';
+import './current_params_guage_display.dart';
 
 import './actions.dart';
 import './redux_state.dart';
@@ -13,8 +15,6 @@ class PresetBlenderPage extends StatefulWidget {
 
 class _PresetBlenderPageState extends State<PresetBlenderPage>
     with SingleTickerProviderStateMixin {
-
-  double _blendSliderValue = 0.5;
 
   Animation<double> _angleAnimation;
   AnimationController _controller;
@@ -69,119 +69,18 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            StoreConnector<ReduxState, ReduxState>(
-              converter: (store) => store.state,
-              builder: (context, state) {
-                return Container(
-                // padding: EdgeInsets.only(bottom: 40),
-                  child: Transform.scale(
-                    scale: 2.5,
-                    child: presetGaugeDisplay(
-                      state.currentParams[0],
-                      state.currentParams[1],
-                      state.currentParams[2],
-                      _angleAnimation.value,
-                    ),
-                  ),
-                );
-              }
+            Container(
+            // padding: EdgeInsets.only(bottom: 40),
+              child: Transform.scale(
+                scale: 2.5,
+                child: CurrentParamsGuageDisplay(_angleAnimation.value)
+              ),
             ),
             Row(
               children: <Widget>[
-                StoreConnector<ReduxState, ReduxState>(
-                  converter: (store) => store.state,
-                  builder: (context, state) {
-                    return ButtonTheme(
-                      alignedDropdown: true,
-                      child:DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: presetSelectedLeft,
-                          elevation: 8,
-                          items: List<DropdownMenuItem<int>>.generate(
-                            state.savedPresets.length,
-                            (int index) => DropdownMenuItem(
-                              value: index,
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                child: Transform.scale(
-                                  scale: index == presetSelectedLeft ? 0.7 : 0.5,
-                                  child: presetGaugeDisplay(
-                                    state.savedPresets[index][0], 
-                                    state.savedPresets[index][1],
-                                    state.savedPresets[index][2],
-                                    _angleAnimation.value,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              presetSelectedLeft = value;
-                            });
-                          }
-                        ),
-                      ),
-                    );
-                  }
-                ),
-                StoreConnector<ReduxState, VoidCallback>(
-                  converter: (store) {
-                    return () => store.dispatch(BlendPresets(presetSelectedLeft, presetSelectedRight, _blendSliderValue));
-                  },
-                  builder: (context, callback) {
-                    return Expanded(
-                      child: Slider(
-                        value: _blendSliderValue,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _blendSliderValue = newValue;             
-                          });
-                          callback();
-                        },
-                      ),
-                    );
-                  }
-                ),
-                StoreConnector<ReduxState, ReduxState>(
-                  converter: (store) => store.state,
-                  builder: (context, state) {
-                    return ButtonTheme(
-                      alignedDropdown: true,
-                      child:DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: presetSelectedRight,
-                          elevation: 8,
-                          items: List<DropdownMenuItem<int>>.generate(
-                            state.savedPresets.length,
-                            (int index) => DropdownMenuItem(
-                              value: index,
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                child: Transform.scale(
-                                  scale: index == presetSelectedRight ? 0.7 : 0.5,
-                                  child: presetGaugeDisplay(
-                                    state.savedPresets[index][0], 
-                                    state.savedPresets[index][1],
-                                    state.savedPresets[index][2],
-                                    _angleAnimation.value,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              presetSelectedRight = value;
-                            });
-                          }
-                        ),
-                      ),
-                    );
-                  }
-                ),
+                PresetSelector(_angleAnimation.value, LeftRight.left),
+                BlendSlider(),
+                PresetSelector(_angleAnimation.value, LeftRight.right),
               ],
             ),
             StoreConnector<ReduxState, VoidCallback>(
@@ -210,6 +109,87 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
           ],
         ),
       ),
+    );
+  }
+}
+
+class BlendSlider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {    
+    return StoreConnector<ReduxState, Store<ReduxState>>(
+      converter: (store)  => store,
+      onInit: (store) {
+        store.dispatch(BlendPresets());
+      },
+      builder: (context, store) {
+        return Expanded(
+          child: Slider(
+            value: store.state.blendValue,
+            onChanged: (newValue) {
+              store.dispatch(BlendSliderCallback(newValue));
+              store.dispatch(BlendPresets());
+            },
+          ),
+        );
+      }
+    );
+  }
+}
+
+enum LeftRight {
+  left,
+  right,
+}
+class PresetSelector extends StatelessWidget {
+  final double animationAngle;
+  final LeftRight leftRight;
+  PresetSelector(this.animationAngle, this.leftRight);
+
+  @override
+  Widget build(BuildContext context) {    
+    int presetSelected;
+    return StoreConnector<ReduxState, Store<ReduxState>>(
+      converter: (store) => store,
+      builder: (context, store) {
+        if (leftRight == LeftRight.left) {
+          presetSelected = store.state.presetSelectedLeft;
+        } else {
+          presetSelected = store.state.presetSelectedRight;
+        }
+        return ButtonTheme(
+          alignedDropdown: true,
+          child:DropdownButtonHideUnderline(
+            child: DropdownButton(
+              value: presetSelected,
+              elevation: 8,
+              items: List<DropdownMenuItem<int>>.generate(
+                store.state.savedPresets.length,
+                (int index) => DropdownMenuItem(
+                  value: index,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    child: Transform.scale(
+                      scale: index == presetSelected ? 0.7 : 0.5,
+                      child: presetGaugeDisplay(
+                        store.state.savedPresets[index],
+                        animationAngle,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              onChanged: (value) {
+                if (leftRight == LeftRight.left) {
+                  store.dispatch(LeftPresetSelectorCallback(value));
+                } else {
+                  store.dispatch(RightPresetSelectorCallback(value));
+                }
+              }
+            ),
+          ),
+        );
+      }
     );
   }
 }

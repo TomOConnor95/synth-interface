@@ -8,5 +8,16 @@ class ReduxState {
 
   final WebSocketChannel channel;
 
-  ReduxState(this.currentParams, this.savedPresets, this.channel);
+  int presetSelectedLeft;
+  int presetSelectedRight;
+  double blendValue;
+
+  ReduxState(
+    this.currentParams,
+    this.savedPresets,
+    this.channel,
+    this.presetSelectedLeft,
+    this.presetSelectedRight,
+    this.blendValue,
+  );
 }
