@@ -48,15 +48,35 @@ SynthDef(\threeOscSynth, {
 		SinOsc.kr(widthFreq[2], 0, widthAmp[2], 1)
 	];
 
-	osc = Array.fill(3, { arg oscNum;
-		[
-			RLPF.ar(
-				Pulse.ar(freq * frequency[oscNum], 0.5, ampMod[oscNum]),
-				SinOsc.kr(opacityFreq[oscNum], 0, (opacityAmp[oscNum]), 1).linlin(0, 2, 500, 3000),
-				opacityAmp[oscNum].linlin(0,1, 3, 0.8)
-			) * vel;
-		]
-	});
+	osc = Array.fill(
+		3,
+		{ arg oscNum;
+			[
+				RLPF.ar(
+					MulAdd(
+						Pulse.ar(freq * frequency[oscNum], 0.5, ampMod[oscNum]),
+						red[oscNum].linlin(0, 255, 0, 1),
+						MulAdd(
+							Saw.ar(freq * frequency[oscNum], ampMod[oscNum]),
+							green[oscNum].linlin(0, 255, 0, 1),
+							MulAdd(
+								LFTri.ar(freq * frequency[oscNum], 0, ampMod[oscNum]),
+								blue[oscNum].linlin(0, 255, 0, 1),
+								0,
+							)
+						)
+					),
+					SinOsc.kr(
+						opacityFreq[oscNum],
+						0,
+						opacityAmp[oscNum],
+						1,
+					).linlin(0, 2, 600, 5000),
+					opacityAmp[oscNum].linlin(0,1, 3, 0.8)
+				) * vel;
+			]
+		}
+	);
 
 	snd = Mix((length[0] * osc[0]) + (length[1] * osc[1]) + (length[2] * osc[2]));
     snd = snd * (SinOsc.ar(lfoSpeed) * lfoDepth + 1);
@@ -69,7 +89,7 @@ SynthDef(\threeOscSynth, {
 }).add;
 )
 
-a = Synth(\threeOscSynth, );
+a = Synth(\threeOscSynth, )
 a.set(\freq, 100)
 
 a.map(
@@ -84,12 +104,19 @@ a.map(
 	\blue, ~blue,
 )
 
-a.set(\length, [1,0.5,0.4])
-a.set(\frequency, [2,7,4])
+a.set(\length, [1,0.0,0.0])
+a.set(\frequency, [2,2,3])
 a.set(\widthFreq, [1,2,3])
-a.set(\widthAmp, [1,1,1])
-a.set(\opacityFreq, [1,1,2])
-a.set(\opacityAmp, [0.0,0.5,0.0])
+a.set(\widthAmp, [0,0,1])
+a.set(\opacityFreq, [2,1,2])
+a.set(\opacityAmp, [1,0.0,0.0])
+a.set(\red, [90, 0, 255])
+a.set(\green, [40, 255, 0])
+a.set(\blue, [205, 0, 0])
+
+a.set(\red, [0, 0, 0])
+a.set(\green, [0, 0, 0])
+a.set(\blue, [0, 0, 0])
 
 (
 Pbind(
@@ -121,3 +148,6 @@ Pbind(
 ~widthFreq.set(1, 2, 3);
 ~opacityAmp.set(0.1, 0.2, 0.3);
 ~opacityFreq.set(1, 2, 3);
+~red.set(0, 0, 255);
+~green.set(0, 255, 0);
+~blue.set(255, 0, 0);
