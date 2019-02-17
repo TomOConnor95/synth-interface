@@ -146,6 +146,11 @@ void sendParametersToSynth(WebSocketChannel channel, List<OscillatorParams> pres
       'widthFreq': preset[0].widthFreq,
       'opacityAmp': preset[0].opacityAmp,
       'opacityFreq': preset[0].opacityFreq,
+      'color':{
+        'r': preset[0].color.red,
+        'g': preset[0].color.green,
+        'b': preset[0].color.blue,
+      },
     },
     'oscillator2': {
       'length': preset[1].length,
@@ -154,6 +159,11 @@ void sendParametersToSynth(WebSocketChannel channel, List<OscillatorParams> pres
       'widthFreq': preset[1].widthFreq,
       'opacityAmp': preset[1].opacityAmp,
       'opacityFreq': preset[1].opacityFreq,
+      'color':{
+        'r': preset[1].color.red,
+        'g': preset[1].color.green,
+        'b': preset[1].color.blue,
+      },
     },
     'oscillator3': {
       'length': preset[2].length,
@@ -162,6 +172,11 @@ void sendParametersToSynth(WebSocketChannel channel, List<OscillatorParams> pres
       'widthFreq': preset[2].widthFreq,
       'opacityAmp': preset[2].opacityAmp,
       'opacityFreq': preset[2].opacityFreq,
+      'color':{
+        'r': preset[2].color.red,
+        'g': preset[2].color.green,
+        'b': preset[2].color.blue,
+      },
     }
   };
   
