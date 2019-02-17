@@ -33,35 +33,32 @@ SynthDef(\threeOscSynth, {
 
 
     var env1, env2, env3;
-    var osc1, osc2, osc3, snd;
+	var ampMod;
+    var osc, snd;
 
 	lfoSpeed = lfoSpeed * 12;
 
+    //env1 = EnvGen.ar(Env.adsr(0.001, 1.25, 0.0, 0.04, curve: \lin));
+    //env2 = EnvGen.ar(Env.adsr(0.001, 1.00, 0.0, 0.04, curve: \lin));
+    //env3 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
 
-    env1 = EnvGen.ar(Env.adsr(0.001, 1.25, 0.0, 0.04, curve: \lin));
-    env2 = EnvGen.ar(Env.adsr(0.001, 1.00, 0.0, 0.04, curve: \lin));
-    env3 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
+	ampMod = [
+		SinOsc.kr(widthFreq[0], 0, widthAmp[0], 1),
+		SinOsc.kr(widthFreq[1], 0, widthAmp[1], 1),
+		SinOsc.kr(widthFreq[2], 0, widthAmp[2], 1)
+	];
 
+	osc = Array.fill(3, { arg oscNum;
+		[
+			RLPF.ar(
+				Pulse.ar(freq * frequency[oscNum], 0.5, ampMod[oscNum]),
+				SinOsc.kr(opacityFreq[oscNum], 0, (opacityAmp[oscNum]), 1).linlin(0, 2, 500, 3000),
+				opacityAmp[oscNum].linlin(0,1, 3, 0.8)
+			) * vel;
+		]
+	});
 
-	osc1 = RLPF.ar(
-		Pulse.ar(freq * frequency[0], 0.5, SinOsc.kr((widthFreq[0]), 0, widthAmp[0]*1, 1)),
-		SinOsc.kr(opacityFreq[0], 0, (opacityAmp[0]), 1).linlin(0, 2, 500, 3000),
-		opacityAmp[0].linlin(0,1, 3, 0.8)
-	) * vel;
-
-	osc2 = RLPF.ar(
-		Pulse.ar(freq * frequency[1], 0.5, SinOsc.kr((widthFreq[1]), 0, widthAmp[1]*1, 1)),
-		SinOsc.kr(opacityFreq[1], 0, (opacityAmp[1]), 1).linlin(0, 2, 500, 3000),
-		opacityAmp[1].linlin(0,1, 3, 0.8)
-	) * vel;
-
-	osc3 = RLPF.ar(
-		Pulse.ar(freq * frequency[2], 0.5, SinOsc.kr((widthFreq[2]), 0, widthAmp[2]*1, 1)),
-		SinOsc.kr(opacityFreq[2], 0, (opacityAmp[2]), 1).linlin(0, 2, 500, 3000),
-		opacityAmp[2].linlin(0,1, 3, 0.8)
-	) * vel;
-
-	snd = Mix((length[0] * osc1) + (length[1] * osc2) + (length[2] * osc3));
+	snd = Mix((length[0] * osc[0]) + (length[1] * osc[1]) + (length[2] * osc[2]));
     snd = snd * (SinOsc.ar(lfoSpeed) * lfoDepth + 1);
 
     // using the doneAction: 2 on the other envs can create clicks (bc of the linear curve maybe?)
@@ -88,9 +85,9 @@ a.map(
 )
 
 a.set(\length, [1,0.5,0.4])
-a.set(\frequency, [2,3,4])
-a.set(\widthFreq, [1,2,2])
-a.set(\widthAmp, [1,0.5,0.0])
+a.set(\frequency, [2,7,4])
+a.set(\widthFreq, [1,2,3])
+a.set(\widthAmp, [1,1,1])
 a.set(\opacityFreq, [1,1,2])
 a.set(\opacityAmp, [0.0,0.5,0.0])
 
