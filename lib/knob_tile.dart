@@ -82,7 +82,7 @@ class _KnobTileIntState extends State<KnobTileInt>{
         children: <Widget>[
           KnobInt(
             color: widget.color,
-            min: 0,
+            min: 1,
             max: 10,
             size: 40,
             onChanged: (value) => widget.callback(value.toInt()),

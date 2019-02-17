@@ -34,9 +34,9 @@ ReduxState counterReducer(ReduxState state, dynamic action) {
     if (action.oscillatorToRandomise == 0) {
       state.currentParams[0] = randomOscillatorParams();
     } else if (action.oscillatorToRandomise == 1) {
-      state.currentParams[0] = randomOscillatorParams();
+      state.currentParams[1] = randomOscillatorParams();
     } else if (action.oscillatorToRandomise == 2) {
-      state.currentParams[0] = randomOscillatorParams();
+      state.currentParams[2] = randomOscillatorParams();
     } else {
       state.currentParams[0] = randomOscillatorParams();
       state.currentParams[1] = randomOscillatorParams();
@@ -138,35 +138,35 @@ void main() {
 }
 
 void sendParametersToSynth(WebSocketChannel channel, List<OscillatorParams> preset) {
-      var paramsToSend = {
-      'oscillator1': {
-        'length': preset[0].length,
-        'freq': preset[0].freq,
-        'widthAmp': preset[0].widthAmp,
-        'widthFreq': preset[0].widthFreq,
-        'opacityAmp': preset[0].opacityAmp,
-        'opacityFreq': preset[0].opacityFreq,
-      },
-      'oscillator2': {
-        'length': preset[1].length,
-        'freq': preset[1].freq,
-        'widthAmp': preset[1].widthAmp,
-        'widthFreq': preset[1].widthFreq,
-        'opacityAmp': preset[1].opacityAmp,
-        'opacityFreq': preset[1].opacityFreq,
-      },
-      'oscillator3': {
-        'length': preset[2].length,
-        'freq': preset[2].freq,
-        'widthAmp': preset[2].widthAmp,
-        'widthFreq': preset[2].widthFreq,
-        'opacityAmp': preset[2].opacityAmp,
-        'opacityFreq': preset[2].opacityFreq,
-      }
-    };
-    
-    channel.sink.add(json.encode(paramsToSend));
-  } 
+  var paramsToSend = {
+    'oscillator1': {
+      'length': preset[0].length,
+      'freq': preset[0].freq,
+      'widthAmp': preset[0].widthAmp,
+      'widthFreq': preset[0].widthFreq,
+      'opacityAmp': preset[0].opacityAmp,
+      'opacityFreq': preset[0].opacityFreq,
+    },
+    'oscillator2': {
+      'length': preset[1].length,
+      'freq': preset[1].freq,
+      'widthAmp': preset[1].widthAmp,
+      'widthFreq': preset[1].widthFreq,
+      'opacityAmp': preset[1].opacityAmp,
+      'opacityFreq': preset[1].opacityFreq,
+    },
+    'oscillator3': {
+      'length': preset[2].length,
+      'freq': preset[2].freq,
+      'widthAmp': preset[2].widthAmp,
+      'widthFreq': preset[2].widthFreq,
+      'opacityAmp': preset[2].opacityAmp,
+      'opacityFreq': preset[2].opacityFreq,
+    }
+  };
+  
+  channel.sink.add(json.encode(paramsToSend));
+} 
 
 class MyApp extends StatelessWidget {
   MyApp({this.store});
@@ -407,7 +407,7 @@ class OscillatorPanel extends StatelessWidget {
                     ampMax: 1,
                     ampCallback: (value) => store.dispatch(WidthAmpCallback(oscNum, value)),
                     freqValue: store.state.currentParams[oscNum].widthFreq,
-                    freqMin: 0,
+                    freqMin: 1,
                     freqMax: 10,
                     freqCallback: (value) => store.dispatch(WidthFreqCallback(oscNum, value)),
                     label: 'Width Mod',
@@ -419,7 +419,7 @@ class OscillatorPanel extends StatelessWidget {
                     ampMax: 1,
                     ampCallback: (value) => store.dispatch(OpacityAmpCallback(oscNum, value)),
                     freqValue: store.state.currentParams[oscNum].opacityFreq,
-                    freqMin: 0,
+                    freqMin: 1,
                     freqMax: 10,
                     freqCallback: (value) => store.dispatch(OpacityFreqCallback(oscNum, value)),
                     label: 'Opacity Mod',

@@ -67,9 +67,9 @@ class _SliderTileIntState extends State<SliderTileInt>{
       trailing: ParameterValueDisplayInt(widget.sliderValue, widget.color, width: 48),
       title: Slider(
         activeColor: widget.color,
-        min: 0,
+        min: 1,
         max: 10,
-        divisions: 10,
+        divisions: 9,
         onChanged: (value) => widget.callback(value.toInt()),
         value: widget.sliderValue.toDouble(),
       ),

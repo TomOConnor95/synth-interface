@@ -56,11 +56,11 @@ OscillatorParams randomOscillatorParams(){
   var randomGenerator = Random();
   return OscillatorParams(
     length: randomGenerator.nextDouble(),
-    freq: randomGenerator.nextInt(11),
+    freq: randomGenerator.nextInt(10) + 1,
     widthAmp: randomGenerator.nextDouble(),
-    widthFreq: randomGenerator.nextInt(11),
+    widthFreq: randomGenerator.nextInt(10) + 1,
     opacityAmp: randomGenerator.nextDouble(),
-    opacityFreq: randomGenerator.nextInt(11),
+    opacityFreq: randomGenerator.nextInt(10) + 1,
     color: Color.fromRGBO(
       randomGenerator.nextInt(256),
       randomGenerator.nextInt(256),
