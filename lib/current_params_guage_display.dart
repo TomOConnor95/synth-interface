@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import './preset_gauge_display.dart';
 
-import './redux_state.dart';
+import './redux/redux_state.dart';
 
 
 class CurrentParamsGuageDisplay extends StatelessWidget {

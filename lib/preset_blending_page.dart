@@ -4,9 +4,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import './preset_gauge_display.dart';
 import './current_params_guage_display.dart';
+import './save_preset_button.dart';
 
-import './actions.dart';
-import './redux_state.dart';
+import './redux/actions.dart';
+import './redux/redux_state.dart';
 
 class PresetBlenderPage extends StatefulWidget {
   @override
@@ -83,23 +84,7 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
                 PresetSelector(_angleAnimation.value, LeftRight.right),
               ],
             ),
-            StoreConnector<ReduxState, VoidCallback>(
-              converter: (store) {
-                return () => store.dispatch(SavePreset());
-              },
-              builder: (context, callback) {
-                return RaisedButton(
-                  onPressed: callback,
-                  child: Text('Save Preset',
-                    style: TextStyle(color: Colors.white)
-                  ),
-                  color: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)
-                  ),
-                );
-              }
-            ),
+            SavePresetButton(),
             RaisedButton(
               onPressed: () {
                 Navigator.pop(context);
