@@ -62,7 +62,7 @@ var initialParams = [
 var initialState = ReduxState(
   initialParams,
   [],
-  IOWebSocketChannel.connect('ws://127.0.0.1:6666'),
+  IOWebSocketChannel.connect('ws://172.25.5.62:6666'),
   0,
   1,
   0.5,
