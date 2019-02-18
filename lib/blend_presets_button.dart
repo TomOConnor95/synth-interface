@@ -12,7 +12,8 @@ class BlendPresetsButton extends StatelessWidget {
         converter: (store) => store.state,
         builder: (context, state) {
           return RaisedButton(
-            child: Text('Blend Presets', style: TextStyle(color: Colors.white)),
+            child: Text('Blend Presets', style: Theme.of(context).textTheme.button),
+            color: Theme.of(context).buttonColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0)),
             onPressed: (state.savedPresets.length < 2)

@@ -14,8 +14,8 @@ class RandomiseButton extends StatelessWidget {
         builder: (context, callback) {
           return RaisedButton(
             onPressed: callback,
-            child: Text('Randomise', style: TextStyle(color: Colors.white)),
-            color: Colors.red,
+            child: Text('Randomise', style: Theme.of(context).textTheme.button),
+            color: Theme.of(context).buttonColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
           );

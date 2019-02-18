@@ -30,10 +30,11 @@ class MyApp extends StatelessWidget {
       store: store,
       child: MaterialApp(
         title: 'Synth Interface App',
-        theme: ThemeData(
-          // This is the theme of your application.
-          primarySwatch: Colors.blue,
-        ),
+        theme:ThemeData.light(),
+        // theme: ThemeData(
+        //   // This is the theme of your application.
+        //   primarySwatch: Colors.blue,
+        // ),
         home: PresetEditPage(
           title: 'Preset Editor',
         ),
