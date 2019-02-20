@@ -69,7 +69,7 @@ class _KnobTileIntState extends State<KnobTileInt>{
   @override
   Widget build(BuildContext context) {
       return ListTile(
-      contentPadding: EdgeInsets.only(left: 16),
+      // contentPadding: EdgeInsets.only(left: 16),
       dense: true,
       leading: Text(
         widget.label,
@@ -78,7 +78,8 @@ class _KnobTileIntState extends State<KnobTileInt>{
         fontSize: 20,
         ),
       ),
-      title: Column(
+      title: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           KnobInt(
             color: widget.color,

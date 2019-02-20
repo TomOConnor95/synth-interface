@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import './slider_tile.dart';
+import './knob_tile.dart';
 import './amp_freq_knobs.dart';
 import './oscillator_title_row.dart';
 
@@ -33,11 +34,11 @@ class OscillatorPanel extends StatelessWidget {
               (value) => store.dispatch(LengthCallback(oscNum, value)),
               'Length'
             ),
-            SliderTileInt(
-              store.state.currentParams[oscNum].freq,
-              store.state.currentParams[oscNum].color,
-              (value) => store.dispatch(FreqCallback(oscNum, value)),
-              'Freq'),
+            KnobTileInt(
+              value: store.state.currentParams[oscNum].freq,
+              color: store.state.currentParams[oscNum].color,
+              callback: (value) => store.dispatch(FreqCallback(oscNum, value)),
+              label: 'Frequency'),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
