@@ -9,57 +9,7 @@ import './save_preset_button.dart';
 import './redux/actions.dart';
 import './redux/redux_state.dart';
 
-class PresetBlenderPage extends StatefulWidget {
-  @override
-  _PresetBlenderPageState createState() => _PresetBlenderPageState();
-}
-
-class _PresetBlenderPageState extends State<PresetBlenderPage>
-    with SingleTickerProviderStateMixin {
-
-  Animation<double> _angleAnimation;
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = new AnimationController(
-        duration: const Duration(milliseconds: 6000), vsync: this);
-    _angleAnimation = new Tween(begin: 0.0, end: 360.0).animate(_controller)
-      ..addListener(() {
-        setState(() {
-          // the state that has changed here is the animation object’s value
-        });
-      });
-
-    _angleAnimation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reset();
-      } else if (status == AnimationStatus.dismissed) {
-        _controller.forward();
-      }
-    });
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  int presetSelectedLeft = 0;
-  int presetSelectedRight = 1;
-  
-  double length;
-  int freq;
-  double widthAmp;
-  int widthFreq;
-  double opacityAmp;
-  int opacityFreq;
-  Color color;
-
+class PresetBlenderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,9 +29,9 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
             ),
             Row(
               children: <Widget>[
-                PresetSelector(_angleAnimation.value, LeftRight.left),
+                PresetSelector(LeftRight.left),
                 BlendSlider(),
-                PresetSelector(_angleAnimation.value, LeftRight.right),
+                PresetSelector(LeftRight.right),
               ],
             ),
             SavePresetButton(),
@@ -126,9 +76,8 @@ enum LeftRight {
   right,
 }
 class PresetSelector extends StatelessWidget {
-  final double animationAngle;
   final LeftRight leftRight;
-  PresetSelector(this.animationAngle, this.leftRight);
+  PresetSelector(this.leftRight);
 
   @override
   Widget build(BuildContext context) {    
@@ -156,9 +105,8 @@ class PresetSelector extends StatelessWidget {
                     height: 50,
                     child: Transform.scale(
                       scale: index == presetSelected ? 0.7 : 0.5,
-                      child: presetGaugeDisplay(
+                      child: PresetGaugeDisplay(
                         store.state.savedPresets[index],
-                        animationAngle,
                       ),
                     ),
                   ),
