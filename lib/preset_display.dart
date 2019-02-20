@@ -7,10 +7,46 @@ import './preset_gauge_display.dart';
 import './redux/actions.dart';
 import './redux/redux_state.dart';
 
-class PresetDisplay extends StatelessWidget {
-  final double animationAngle;
+class PresetDisplay extends StatefulWidget {
+  @override
+  _PresetDisplayState createState() => _PresetDisplayState();
+}
 
-  PresetDisplay(this.animationAngle);
+class _PresetDisplayState extends State<PresetDisplay>
+    with SingleTickerProviderStateMixin {
+
+  Animation<double> _angleAnimation;
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = new AnimationController(
+        duration: const Duration(milliseconds: 6000), vsync: this);
+    _angleAnimation = new Tween(begin: 0.0, end: 360.0).animate(_controller)
+      ..addListener(() {
+        setState(() {
+          // the state that has changed here is the animation object’s value
+        });
+      });
+
+    _angleAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reset();
+      } else if (status == AnimationStatus.dismissed) {
+        _controller.forward();
+      }
+    });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<ReduxState, Store<ReduxState>>(
@@ -39,7 +75,7 @@ class PresetDisplay extends StatelessWidget {
                         scale: 0.65,
                         child: presetGaugeDisplay(
                           store.state.savedPresets[position],
-                          animationAngle,
+                          _angleAnimation.value,
                         )
                       ),
                     ),

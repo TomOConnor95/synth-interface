@@ -74,7 +74,7 @@ class _PresetBlenderPageState extends State<PresetBlenderPage>
             // padding: EdgeInsets.only(bottom: 40),
               child: Transform.scale(
                 scale: 2.5,
-                child: CurrentParamsGuageDisplay(_angleAnimation.value)
+                child: CurrentParamsGuageDisplay()
               ),
             ),
             Row(
