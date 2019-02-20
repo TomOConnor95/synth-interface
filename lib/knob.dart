@@ -39,36 +39,35 @@ class KnobState extends State<Knob> {
                 double newValue = ((newAngle + 0.9*pi) / (1.8 * pi)) * (widget.max - widget.min) + widget.min;
                 widget.onChanged(newValue);
             },
-            child: Container(
-              // width: 190.0,
-              // height: 190.0,
-              decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      // image: ExactAssetImage('assets/images/cat.jpg'),
-                      image: ExactAssetImage('assets/images/cartoonCat.gif'),
-                  )
-              )
-            ),
-            
-            
-            // child: ClipOval(
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //       color: widget.color.withAlpha((170 + normalisedValue*255/3).toInt()),
-            //       borderRadius: BorderRadius.circular(25.0),
-            //       border: Border.all(
-            //         width: 3.0,
-            //         color: widget.color.withAlpha((255 - normalisedValue*255).toInt()),
-            //       ),
-            //     ),
-            //     child: Icon(Icons.arrow_upward,
-            //       color: Colors.white,
-            //       size: size * 0.75,
-            //     )
-            //   ),
+            // child: Container(
+            //   // width: 190.0,
+            //   // height: 190.0,
+            //   decoration: new BoxDecoration(
+            //       shape: BoxShape.circle,
+            //       image: new DecorationImage(
+            //           fit: BoxFit.fill,
+            //           // image: ExactAssetImage('assets/images/cat.jpg'),
+            //           image: ExactAssetImage('assets/images/cartoonCat.gif'),
+            //       )
+            //   )
             // ),
+            
+            child: ClipOval(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: widget.color.withAlpha((170 + normalisedValue*255/3).toInt()),
+                  borderRadius: BorderRadius.circular(25.0),
+                  border: Border.all(
+                    width: 3.0,
+                    color: widget.color.withAlpha((255 - normalisedValue*255).toInt()),
+                  ),
+                ),
+                child: Icon(Icons.arrow_upward,
+                  color: Colors.white,
+                  size: size * 0.75,
+                )
+              ),
+            ),
           ),
         ),
       ),
@@ -133,34 +132,34 @@ class KnobIntState extends State<KnobInt> {
                   widget.onChanged(newValue.round());
                 });
             },
-            child: Container(
-              // width: 190.0,
-              // height: 190.0,
-              decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      // image: ExactAssetImage('assets/images/cat.jpg'),
-                      image: ExactAssetImage('assets/images/cartoonMonkey.gif'),
-                  )
-              )
-            ),
-            // child: ClipOval(
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //       color: widget.color.withAlpha((170 + normalisedValue*255/3).toInt()),
-            //       borderRadius: BorderRadius.circular(25.0),
-            //       border: Border.all(
-            //         width: 3.0,
-            //         color: widget.color.withAlpha((255 - normalisedValue*255).toInt()),
-            //       ),
-            //     ),
-            //     child: Icon(Icons.arrow_upward,
-            //       color: iconColor,
-            //       size: size * 0.75,
-            //     )
-            //   ),
+            // child: Container(
+            //   // width: 190.0,
+            //   // height: 190.0,
+            //   decoration: new BoxDecoration(
+            //       shape: BoxShape.circle,
+            //       image: new DecorationImage(
+            //           fit: BoxFit.fill,
+            //           // image: ExactAssetImage('assets/images/cat.jpg'),
+            //           image: ExactAssetImage('assets/images/cartoonMonkey.gif'),
+            //       )
+            //   )
             // ),
+            child: ClipOval(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: widget.color.withAlpha((170 + normalisedValue*255/3).toInt()),
+                  borderRadius: BorderRadius.circular(25.0),
+                  border: Border.all(
+                    width: 3.0,
+                    color: widget.color.withAlpha((255 - normalisedValue*255).toInt()),
+                  ),
+                ),
+                child: Icon(Icons.arrow_upward,
+                  color: iconColor,
+                  size: size * 0.75,
+                )
+              ),
+            ),
           ),
         ),
       ),
