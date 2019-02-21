@@ -17,7 +17,7 @@ s.queryAllNodes
 (
 SynthDef(\threeOscSynth, {
     // standard meanings
-    arg out = 0, freq = 440, gate = 1, pan = 0, amp = 0.1,
+    arg out = 0, freq = 440, gate = 1, pan = 0, amp = 0.5,
     // all of these range from 0 to 1
     vel = 0.8, modIndex = 0.2, mix = 0.2, lfoSpeed = 0.00, lfoDepth = 0.01,
 
@@ -78,7 +78,7 @@ SynthDef(\threeOscSynth, {
 		}
 	);
 
-	snd = Mix((length[0] * osc[0]) + (length[1] * osc[1]) + (length[2] * osc[2]));
+	snd = Mix((length[0] * osc[0]) + (length[1] * osc[1]) + (length[2] * osc[2]))*0.7;
     snd = snd * (SinOsc.ar(lfoSpeed) * lfoDepth + 1);
 
     // using the doneAction: 2 on the other envs can create clicks (bc of the linear curve maybe?)
@@ -90,6 +90,8 @@ SynthDef(\threeOscSynth, {
 )
 
 a = Synth(\threeOscSynth, )
+a.free
+
 a.set(\freq, 100)
 
 a.map(

@@ -40,18 +40,15 @@ class KnobState extends State<Knob> {
                 widget.onChanged(newValue);
             },
             // child: Container(
-            //   // width: 190.0,
-            //   // height: 190.0,
-            //   decoration: new BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       image: new DecorationImage(
-            //           fit: BoxFit.fill,
-            //           // image: ExactAssetImage('assets/images/cat.jpg'),
-            //           image: ExactAssetImage('assets/images/cartoonCat.gif'),
-            //       )
-            //   )
-            // ),
-            
+            //   decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //       fit: BoxFit.fill,
+            //       image: ExactAssetImage('assets/images/cat.jpg'),
+            //       // image: ExactAssetImage('assets/images/cartoonCat.gif'),
+            //     ),
+            //     shape: BoxShape.circle,
+            //   ),
+            // )
             child: ClipOval(
               child: Container(
                 decoration: BoxDecoration(
@@ -133,15 +130,12 @@ class KnobIntState extends State<KnobInt> {
                 });
             },
             // child: Container(
-            //   // width: 190.0,
-            //   // height: 190.0,
-            //   decoration: new BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       image: new DecorationImage(
+            //   decoration: BoxDecoration(
+            //       image: DecorationImage(
             //           fit: BoxFit.fill,
-            //           // image: ExactAssetImage('assets/images/cat.jpg'),
             //           image: ExactAssetImage('assets/images/cartoonMonkey.gif'),
-            //       )
+            //       ),
+            //       shape: BoxShape.circle,
             //   )
             // ),
             child: ClipOval(
